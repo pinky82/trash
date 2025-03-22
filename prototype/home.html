@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand': '#FF9500',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .city-popup {
+            transform: translateY(100%);
+            transition: transform 0.3s ease-in-out;
+            display: none;
+        }
+        .city-popup.active {
+            transform: translateY(0);
+            display: block;
+        }
+        .gradient-card {
+            background: linear-gradient(135deg, rgba(255,149,0,0.1) 0%, rgba(255,87,51,0.1) 100%);
+            backdrop-filter: blur(10px);
+        }
+        .loading-spinner {
+            display: none;
+            width: 24px;
+            height: 24px;
+            border: 2px solid #FF9500;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 1rem auto;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .community-list-container {
+            height: 414px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .community-list-container::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-black">
+    <!-- Header with Location -->
+    <header class="bg-black p-4 flex justify-between items-center">
+        <button onclick="toggleCityPopup()" class="flex items-center">
+            <span id="selectedCity" class="text-lg font-medium text-white">定位中...</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1 text-white" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+        </button>
+        <div class="flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+            </svg>
+        </div>
+    </header>
+
+    <!-- Search Bar -->
+    <div class="p-4">
+        <div class="relative">
+            <input type="search" placeholder="搜索小区" class="w-full p-3 pl-10 rounded-lg bg-gray-900 text-white placeholder-gray-400 border-0">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute left-3 top-3.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+        </div>
+    </div>
+
+    <!-- Community Cards -->
+    <div id="communityList" class="community-list-container p-4 space-y-4">
+        <!-- Community Card 1 -->
+        <div class="bg-gray-900 rounded-xl p-4">
+            <div class="flex">
+                <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00" alt="小区1" class="w-24 h-24 rounded-lg object-cover">
+                <div class="ml-4 flex-1">
+                    <h3 class="text-lg font-medium text-white">阳光小区</h3>
+                    <p class="text-gray-400 text-sm mt-1">浦东新区张杨路500号</p>
+                    <div class="mt-2 flex justify-between items-center">
+                        <span class="text-xs text-gray-400">预计等待：5分钟</span>
+                        <button class="bg-brand text-white px-4 py-1 rounded-full text-sm" onclick="loadAppointmentPage()">预约上门</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Community Card 2 -->
+        <div class="bg-gray-900 rounded-xl p-4">
+            <div class="flex">
+                <img src="https://images.unsplash.com/photo-1591474200742-8e512e6f98f8" alt="小区2" class="w-24 h-24 rounded-lg object-cover">
+                <div class="ml-4 flex-1">
+                    <h3 class="text-lg font-medium text-white">和谐花园</h3>
+                    <p class="text-gray-400 text-sm mt-1">浦东新区浦建路250号</p>
+                    <div class="mt-2 flex justify-between items-center">
+                        <span class="text-xs text-gray-400">预计等待：3分钟</span>
+                        <button class="bg-brand text-white px-4 py-1 rounded-full text-sm" onclick="loadAppointmentPage()">预约上门</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Community Card 3 -->
+        <div class="bg-gray-900 rounded-xl p-4">
+            <div class="flex">
+                <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18" alt="小区3" class="w-24 h-24 rounded-lg object-cover">
+                <div class="ml-4 flex-1">
+                    <h3 class="text-lg font-medium text-white">翠湖花园</h3>
+                    <p class="text-gray-400 text-sm mt-1">浦东新区陆家嘴环路1000号</p>
+                    <div class="mt-2 flex justify-between items-center">
+                        <span class="text-xs text-gray-400">预计等待：8分钟</span>
+                        <button class="bg-brand text-white px-4 py-1 rounded-full text-sm" onclick="loadAppointmentPage()">预约上门</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Community Card 4 -->
+        <div class="bg-gray-900 rounded-xl p-4">
+            <div class="flex">
+                <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750" alt="小区4" class="w-24 h-24 rounded-lg object-cover">
+                <div class="ml-4 flex-1">
+                    <h3 class="text-lg font-medium text-white">金茂府</h3>
+                    <p class="text-gray-400 text-sm mt-1">浦东新区世纪大道2000号</p>
+                    <div class="mt-2 flex justify-between items-center">
+                        <span class="text-xs text-gray-400">预计等待：10分钟</span>
+                        <button class="bg-brand text-white px-4 py-1 rounded-full text-sm" onclick="loadAppointmentPage()">预约上门</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div id="loadingSpinner" class="loading-spinner"></div>
+    </div>
+
+    <!-- Become a Recycler Card -->
+    <div class="p-4">
+        <div class="gradient-card rounded-2xl p-6 border border-brand border-opacity-20">
+            <div class="flex items-start justify-between">
+                <div class="flex-1">
+                    <h3 class="text-xl font-bold text-white">成为丢手</h3>
+                    <p class="text-gray-400 text-sm mt-2 leading-relaxed">加入我们的环保事业，成为专业的回收人员，为地球环保贡献一份力量</p>
+                    <div class="mt-4 flex space-x-3">
+                        <div class="text-brand text-sm">
+                            <span class="font-bold text-lg">50+</span>
+                            <p class="mt-1">活跃社区</p>
+                        </div>
+                        <div class="text-brand text-sm">
+                            <span class="font-bold text-lg">1000+</span>
+                            <p class="mt-1">月均订单</p>
+                        </div>
+                        <div class="text-brand text-sm">
+                            <span class="font-bold text-lg">98%</span>
+                            <p class="mt-1">好评率</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="bg-brand text-white px-6 py-2 rounded-full text-sm font-medium hover:bg-opacity-90 transition-colors" onclick="loadApplicationPage()">
+                    立即申请
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- City Selection Popup -->
+    <div id="cityPopup" class="city-popup fixed bottom-0 left-0 w-full bg-gray-900 rounded-t-3xl z-50">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-white">选择城市</h3>
+                <button onclick="toggleCityPopup()" class="text-gray-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="grid grid-cols-3 gap-4">
+                <button onclick="selectCity('上海')" class="py-3 text-center text-white bg-gray-800 rounded-lg hover:bg-gray-700">上海</button>
+                <button onclick="selectCity('北京')" class="py-3 text-center text-gray-400 bg-gray-800 rounded-lg hover:bg-gray-700">北京</button>
+                <button onclick="selectCity('广州')" class="py-3 text-center text-gray-400 bg-gray-800 rounded-lg hover:bg-gray-700">广州</button>
+                <button onclick="selectCity('深圳')" class="py-3 text-center text-gray-400 bg-gray-800 rounded-lg hover:bg-gray-700">深圳</button>
+                <button onclick="selectCity('杭州')" class="py-3 text-center text-gray-400 bg-gray-800 rounded-lg hover:bg-gray-700">杭州</button>
+                <button onclick="selectCity('南京')" class="py-3 text-center text-gray-400 bg-gray-800 rounded-lg hover:bg-gray-700">南京</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 城市选择相关功能
+        function getCurrentPosition() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        // 这里应该是调用后端API根据经纬度获取城市名
+                        // 为演示目的，我们默认设置为上海
+                        selectCity('上海');
+                    },
+                    error => {
+                        console.error('Error getting location:', error);
+                        selectCity('上海'); // 定位失败时默认上海
+                    }
+                );
+            } else {
+                selectCity('上海'); // 不支持定位时默认上海
+            }
+        }
+
+        function selectCity(cityName) {
+            document.getElementById('selectedCity').textContent = cityName;
+            toggleCityPopup();
+        }
+
+        function toggleCityPopup() {
+            const popup = document.getElementById('cityPopup');
+            popup.classList.toggle('active');
+        }
+
+        // 加载申请页面
+        function loadApplicationPage() {
+            fetch('application.html')
+                .then(response => response.text())
+                .then(html => {
+                    document.body.innerHTML = html;
+                })
+                .catch(error => console.error('Error loading application page:', error));
+        }
+
+        // 加载预约页面
+        function loadAppointmentPage() {
+            window.location.href = 'appointment.html';
+        }
+
+        // 模拟社区数据
+        const communities = [
+            {
+                name: '阳光小区',
+                address: '浦东新区张杨路500号',
+                waitTime: '5分钟',
+                image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00'
+            },
+            {
+                name: '和谐花园',
+                address: '浦东新区浦建路250号',
+                waitTime: '3分钟',
+                image: 'https://images.unsplash.com/photo-1591474200742-8e512e6f98f8'
+            },
+            {
+                name: '翠湖花园',
+                address: '浦东新区陆家嘴环路1000号',
+                waitTime: '8分钟',
+                image: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18'
+            },
+            {
+                name: '金茂府',
+                address: '浦东新区世纪大道2000号',
+                waitTime: '10分钟',
+                image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750'
+            },
+            {
+                name: '滨江花园',
+                address: '浦东新区滨江大道1500号',
+                waitTime: '6分钟',
+                image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750'
+            },
+            {
+                name: '东方明珠',
+                address: '浦东新区陆家嘴环路2000号',
+                waitTime: '7分钟',
+                image: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18'
+            }
+        ];
+
+        let currentPage = 1;
+        const itemsPerPage = 4;
+        let isLoading = false;
+
+        // 创建社区卡片
+        function createCommunityCard(community) {
+            return `
+                <div class="bg-gray-900 rounded-xl p-4">
+                    <div class="flex">
+                        <img src="${community.image}" alt="${community.name}" class="w-24 h-24 rounded-lg object-cover">
+                        <div class="ml-4 flex-1">
+                            <h3 class="text-lg font-medium text-white">${community.name}</h3>
+                            <p class="text-gray-400 text-sm mt-1">${community.address}</p>
+                            <div class="mt-2 flex justify-between items-center">
+                                <span class="text-xs text-gray-400">预计等待：${community.waitTime}</span>
+                                <button class="bg-brand text-white px-4 py-1 rounded-full text-sm" onclick="loadAppointmentPage()">预约上门</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 加载更多数据
+        function loadMoreData() {
+            if (isLoading) return;
+            
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const newCommunities = communities.slice(start, end);
+            
+            if (newCommunities.length === 0) return;
+            
+            isLoading = true;
+            document.getElementById('loadingSpinner').style.display = 'block';
+            
+            // 模拟API请求延迟
+            setTimeout(() => {
+                const communityList = document.getElementById('communityList');
+                newCommunities.forEach(community => {
+                    communityList.insertAdjacentHTML('beforeend', createCommunityCard(community));
+                });
+                
+                currentPage++;
+                isLoading = false;
+                document.getElementById('loadingSpinner').style.display = 'none';
+            }, 1000);
+        }
+
+        // 监听滚动事件
+        window.addEventListener('scroll', () => {
+            const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+            if (scrollTop + clientHeight >= scrollHeight - 100) {
+                loadMoreData();
+            }
+        });
+
+        // 页面加载时加载初始数据
+        window.addEventListener('load', () => {
+            getCurrentPosition();
+            loadMoreData();
+        });
+    </script>
+</body>
+</html> 

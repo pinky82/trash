@@ -1,0 +1,58 @@
+.brand {
+  color: #FF9500;
+}
+
+.brand-light {
+  color: #FFB74D;
+}
+
+.from-brand {
+  --tw-gradient-from: #FF9500;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgb(255 183 77 / 0));
+}
+
+.to-brand-light {
+  --tw-gradient-to: #FFB74D;
+}
+
+.bg-brand {
+  background-color: #FF9500;
+}
+
+.bg-gray-900 {
+  background-color: #1A1A1A;
+}
+
+.bg-gray-800 {
+  background-color: #2D2D2D;
+}
+
+.text-gray-400 {
+  color: #9CA3AF;
+}
+
+.text-white\/80 {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.rounded-xl {
+  border-radius: 0.75rem;
+}
+
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.rounded-full {
+  border-radius: 9999px;
+}
+
+.hover\:bg-opacity-90:hover {
+  opacity: 0.9;
+}
+
+.transition-colors {
+  transition-property: color, background-color, border-color, fill, stroke, opacity, box-shadow, transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+} 

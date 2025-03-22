@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand': '#FF9500',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-header {
+            background: linear-gradient(135deg, #FF9500 0%, #FF5733 100%);
+        }
+        .menu-item {
+            transition: all 0.3s ease;
+        }
+        .menu-item:active {
+            transform: scale(0.98);
+        }
+        .stats-card {
+            background: linear-gradient(180deg, rgba(31,41,55,0.5) 0%, rgba(17,24,39,0.8) 100%);
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body class="bg-black min-h-screen">
+    <!-- Profile Header -->
+    <div class="gradient-header p-8 pb-16 relative">
+        <div class="absolute top-0 left-0 w-full h-full bg-black opacity-10 pattern-grid"></div>
+        <div class="relative z-10">
+            <div class="flex items-center">
+                <div class="w-20 h-20 rounded-2xl bg-white overflow-hidden shadow-lg transform rotate-3">
+                    <img src="images/avatar.jpg" alt="头像" class="w-full h-full object-cover">
+                </div>
+                <div class="ml-5 text-white">
+                    <h2 class="text-2xl font-bold tracking-wide">用户名</h2>
+                    <div class="flex items-center mt-1">
+                        <span class="text-sm bg-black bg-opacity-20 px-3 py-1 rounded-full">普通会员</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-card mx-4 rounded-xl p-6 -mt-8 relative z-20 border border-gray-800">
+        <div class="grid grid-cols-4 gap-4">
+            <div class="text-center transform hover:scale-105 transition-transform duration-200">
+                <p class="text-2xl font-bold bg-gradient-to-r from-brand to-yellow-500 bg-clip-text text-transparent">0</p>
+                <p class="text-xs text-gray-400 mt-1">积分</p>
+            </div>
+            <div class="text-center transform hover:scale-105 transition-transform duration-200">
+                <p class="text-2xl font-bold bg-gradient-to-r from-brand to-yellow-500 bg-clip-text text-transparent">0</p>
+                <p class="text-xs text-gray-400 mt-1">优惠券</p>
+            </div>
+            <div class="text-center transform hover:scale-105 transition-transform duration-200">
+                <p class="text-2xl font-bold bg-gradient-to-r from-brand to-yellow-500 bg-clip-text text-transparent">0</p>
+                <p class="text-xs text-gray-400 mt-1">收藏</p>
+            </div>
+            <div class="text-center transform hover:scale-105 transition-transform duration-200">
+                <p class="text-2xl font-bold bg-gradient-to-r from-brand to-yellow-500 bg-clip-text text-transparent">0</p>
+                <p class="text-xs text-gray-400 mt-1">历史</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu List -->
+    <div class="mt-6 mx-4 space-y-3">
+        <div class="menu-item bg-gray-900 rounded-xl p-4 flex items-center justify-between active:bg-gray-800">
+            <div class="flex items-center">
+                <div class="w-10 h-10 rounded-full bg-brand bg-opacity-10 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-brand" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <span class="text-white font-medium">我的订单</span>
+                    <p class="text-xs text-gray-400 mt-0.5">查看全部订单记录</p>
+                </div>
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+            </svg>
+        </div>
+
+        <div class="menu-item bg-gray-900 rounded-xl p-4 flex items-center justify-between active:bg-gray-800">
+            <div class="flex items-center">
+                <div class="w-10 h-10 rounded-full bg-purple-500 bg-opacity-10 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a4 4 0 00-4-4H5.52a2.5 2.5 0 01-2.5-2.5v0a2.5 2.5 0 012.5-2.5H12" />
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <span class="text-white font-medium">我的优惠券</span>
+                    <p class="text-xs text-gray-400 mt-0.5">查看可用优惠券</p>
+                </div>
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+            </svg>
+        </div>
+
+        <div class="menu-item bg-gray-900 rounded-xl p-4 flex items-center justify-between active:bg-gray-800">
+            <div class="flex items-center">
+                <div class="w-10 h-10 rounded-full bg-blue-500 bg-opacity-10 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <span class="text-white font-medium">设置</span>
+                    <p class="text-xs text-gray-400 mt-0.5">账号与安全设置</p>
+                </div>
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+            </svg>
+        </div>
+    </div>
+</body>
+</html> 

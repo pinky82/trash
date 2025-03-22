@@ -1,0 +1,38 @@
+.stats-card {
+  margin: 0 16px;
+  padding: 24px;
+  background: linear-gradient(180deg, rgba(31,41,55,0.5) 0%, rgba(17,24,39,0.8) 100%);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(31, 41, 55, 0.5);
+  margin-top: -32px;
+  position: relative;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+
+  &__item {
+    text-align: center;
+    transform: scale(1);
+    transition: transform 0.2s ease;
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+
+  &__value {
+    font-size: 24px;
+    font-weight: 700;
+    background: linear-gradient(to right, #FF9500, #FFD700);
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  &__label {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.4);
+    margin-top: 4px;
+  }
+} 

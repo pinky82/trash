@@ -1,0 +1,73 @@
+.become-recycler {
+  padding: 16px;
+  // margin-bottom: 16px;
+
+  &__card {
+    background: linear-gradient(135deg, rgba(255, 149, 0, 0.08) 0%, rgba(239, 68, 68, 0.08) 100%);
+    border-radius: 20px;
+    padding: 20px;
+    border: 1px solid rgba(255, 149, 0, 0.15);
+    backdrop-filter: blur(8px);
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__info {
+    flex: 1;
+  }
+
+  &__title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #FFFFFF;
+    word-break: break-all;
+    white-space: normal;
+  }
+
+  &__description {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.6);
+    margin-top: 6px;
+    line-height: 1.5;
+    word-break: break-all;
+    white-space: normal;
+  }
+
+  &__stats {
+    margin-top: 14px;
+    display: flex;
+    gap: 16px;
+  }
+
+  &__stat-item {
+    color: #FF9500;
+    font-size: 13px;
+  }
+
+  &__stat-number {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 1.2;
+  }
+
+  &__stat-label {
+    margin-top: 2px;
+    display: block;
+    opacity: 0.8;
+  }
+
+  &__button {
+    background: #FF9500;
+    color: #FFFFFF;
+    padding: 8px 24px;
+    border-radius: 16px;
+    font-size: 13px;
+    font-weight: 500;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(255, 149, 0, 0.2);
+  }
+} 

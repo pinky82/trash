@@ -1,0 +1,61 @@
+.community-card {
+  background: #1A1A1A;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 12px;
+
+  &__image {
+    width: 88px;
+    height: 88px;
+    border-radius: 12px;
+    flex-shrink: 0;
+    background: #2A2A2A;
+  }
+
+  &__content {
+    margin-left: 12px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__name {
+    font-size: 16px;
+    font-weight: 500;
+    color: #FFFFFF;
+    word-break: break-all;
+    white-space: normal;
+  }
+
+  &__address {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.6);
+    margin-top: 4px;
+    word-break: break-all;
+    white-space: normal;
+  }
+
+  &__footer {
+    margin-top: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__wait-time {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.4);
+    flex-shrink: 0;
+  }
+
+  &__button {
+    background: #FF9500;
+    color: #FFFFFF;
+    padding: 4px 16px;
+    border-radius: 14px;
+    font-size: 13px;
+    font-weight: 500;
+    flex-shrink: 0;
+    margin-left: 8px;
+    box-shadow: 0 2px 8px rgba(255, 149, 0, 0.2);
+  }
+} 

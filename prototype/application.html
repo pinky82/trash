@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>申请成为丢手</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand': '#FF9500',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .community-popup {
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #1f2937;
+            border-top-left-radius: 1.5rem;
+            border-top-right-radius: 1.5rem;
+            z-index: 50;
+            will-change: transform;
+        }
+        .community-popup.active {
+            transform: translateY(0);
+            display: block;
+        }
+        .community-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+            z-index: 40;
+            backdrop-filter: blur(4px);
+        }
+        .community-popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .form-input {
+            @apply w-full p-3 rounded-lg bg-gray-900 text-white placeholder-gray-400 border-0 focus:ring-2 focus:ring-brand focus:outline-none;
+        }
+        .input-container {
+            @apply relative;
+        }
+        .input-container input {
+            @apply pl-10;
+        }
+        .input-container svg {
+            @apply absolute left-3 top-3.5 text-gray-400;
+        }
+    </style>
+</head>
+<body class="bg-black">
+    <!-- Header -->
+    <header class="bg-black p-4 flex items-center">
+        <a href="home.html" class="text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+        </a>
+        <h1 class="text-lg font-medium text-white ml-4">申请成为丢手</h1>
+    </header>
+
+    <!-- Form -->
+    <div class="p-4 space-y-6">
+        <div>
+            <label class="block text-white text-sm mb-2">姓名</label>
+            <div class="input-container">
+                <input type="text" placeholder="请输入真实姓名" class="w-full p-3 rounded-lg bg-gray-900 text-white placeholder-gray-400 border-0">
+            </div>
+        </div>
+
+        <div>
+            <label class="block text-white text-sm mb-2">身份证号</label>
+            <div class="input-container">
+                <input type="text" placeholder="请输入18位身份证号" class="w-full p-3 rounded-lg bg-gray-900 text-white placeholder-gray-400 border-0">
+            </div>
+        </div>
+
+        <div>
+            <label class="block text-white text-sm mb-2">负责小区</label>
+            <button onclick="toggleCommunityPopup()" class="w-full p-3 rounded-lg bg-gray-900 text-white text-left flex justify-between items-center">
+                <span id="selectedCommunity" class="text-gray-400">请选择负责小区</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Submit Button -->
+        <button class="w-full bg-brand text-white py-3 rounded-lg font-medium hover:bg-opacity-90 transition-colors mt-6">
+            提交申请
+        </button>
+    </div>
+
+    <!-- Community Selection Popup -->
+    <div id="communityPopupOverlay" class="community-popup-overlay" onclick="toggleCommunityPopup()"></div>
+    <div id="communityPopup" class="community-popup">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-white">选择负责小区</h3>
+                <button onclick="toggleCommunityPopup()" class="text-gray-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <div class="bg-gray-800 rounded-lg p-4">
+                    <h4 class="text-white font-medium">阳光小区</h4>
+                    <p class="text-gray-400 text-sm mt-1">浦东新区张杨路500号</p>
+                </div>
+                <div class="bg-gray-800 rounded-lg p-4">
+                    <h4 class="text-white font-medium">和谐花园</h4>
+                    <p class="text-gray-400 text-sm mt-1">浦东新区浦建路250号</p>
+                </div>
+                <div class="bg-gray-800 rounded-lg p-4">
+                    <h4 class="text-white font-medium">翠湖花园</h4>
+                    <p class="text-gray-400 text-sm mt-1">浦东新区陆家嘴环路1000号</p>
+                </div>
+                <div class="bg-gray-800 rounded-lg p-4">
+                    <h4 class="text-white font-medium">金茂府</h4>
+                    <p class="text-gray-400 text-sm mt-1">浦东新区世纪大道2000号</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleCommunityPopup() {
+            const popup = document.getElementById('communityPopup');
+            const overlay = document.getElementById('communityPopupOverlay');
+            popup.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        // 为小区选项添加点击事件
+        document.querySelectorAll('.bg-gray-800').forEach(community => {
+            community.addEventListener('click', () => {
+                const name = community.querySelector('h4').textContent;
+                const address = community.querySelector('p').textContent;
+                document.getElementById('selectedCommunity').textContent = name;
+                document.getElementById('selectedCommunity').classList.remove('text-gray-400');
+                toggleCommunityPopup();
+            });
+        });
+    </script>
+</body>
+</html> 
