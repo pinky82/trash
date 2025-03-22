@@ -1,19 +1,19 @@
 .become-recycler {
-  padding: 16px;
-  // margin-bottom: 16px;
+  padding: 16PX;
+  // margin-bottom: 16PX;
 
   &__card {
     background: linear-gradient(135deg, rgba(255, 149, 0, 0.08) 0%, rgba(239, 68, 68, 0.08) 100%);
-    border-radius: 20px;
-    padding: 20px;
-    border: 1px solid rgba(255, 149, 0, 0.15);
-    backdrop-filter: blur(8px);
+    border-radius: 20PX;
+    padding: 20PX;
+    border: 1PX solid rgba(255, 149, 0, 0.15);
+    backdrop-filter: blur(8PX);
   }
 
   &__content {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 16PX;
   }
 
   &__info {
@@ -21,7 +21,7 @@
   }
 
   &__title {
-    font-size: 18px;
+    font-size: 18PX;
     font-weight: 600;
     color: #FFFFFF;
     word-break: break-all;
@@ -29,33 +29,33 @@
   }
 
   &__description {
-    font-size: 13px;
+    font-size: 13PX;
     color: rgba(255, 255, 255, 0.6);
-    margin-top: 6px;
+    margin-top: 6PX;
     line-height: 1.5;
     word-break: break-all;
     white-space: normal;
   }
 
   &__stats {
-    margin-top: 14px;
+    margin-top: 14PX;
     display: flex;
-    gap: 16px;
+    gap: 16PX;
   }
 
   &__stat-item {
     color: #FF9500;
-    font-size: 13px;
+    font-size: 13PX;
   }
 
   &__stat-number {
     font-weight: 600;
-    font-size: 16px;
+    font-size: 16PX;
     line-height: 1.2;
   }
 
   &__stat-label {
-    margin-top: 2px;
+    margin-top: 2PX;
     display: block;
     opacity: 0.8;
   }
@@ -63,11 +63,11 @@
   &__button {
     background: #FF9500;
     color: #FFFFFF;
-    padding: 8px 24px;
-    border-radius: 16px;
-    font-size: 13px;
+    padding: 8PX 24PX;
+    border-radius: 16PX;
+    font-size: 13PX;
     font-weight: 500;
     text-align: center;
-    box-shadow: 0 2px 8px rgba(255, 149, 0, 0.2);
+    box-shadow: 0 2PX 8PX rgba(255, 149, 0, 0.2);
   }
 } 

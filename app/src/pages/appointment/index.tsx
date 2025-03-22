@@ -4,6 +4,7 @@ import { useRouter } from '@tarojs/taro'
 import { FrequencySelector } from '../../components/FrequencySelector'
 import './index.scss'
 
+
 interface CommunityInfo {
   id: string
   name: string
@@ -42,7 +43,7 @@ const Appointment = () => {
   const [form, setForm] = useState<AppointmentForm>({
     building: '',
     room: '',
-    frequency: '请选择上门频率',
+    frequency: '',
     time: '',
     method: 'doorbell'
   })
@@ -69,7 +70,8 @@ const Appointment = () => {
     '13:00', '14:00', '15:00', '16:00'
   ]
 
-  const toggleFrequencyPopup = () => {
+  const toggleFrequencyPopup = (e: any) => {
+    e.stopPropagation()
     setShowFrequencyPopup(!showFrequencyPopup)
   }
 
@@ -93,10 +95,10 @@ const Appointment = () => {
   }
 
   return (
-    <View className='min-h-screen bg-black py-4'>
+    <View className='min-h-full bg-black pb-4 pt-2 box-border flex flex-col'>
       {/* 小区信息 */}
       <View className='p-4 pt-0'>
-        <View className='bg-gray-900 rounded-xl p-4'>
+        <View className='bg-gray-900 rounded-xl p-2'>
           <View className='flex'>
             <Image
               src={communityInfo?.image || ''}
@@ -112,106 +114,115 @@ const Appointment = () => {
       </View>
 
       {/* 表单 */}
-      <View className='px-4 space-y-4'>
-        {/* 楼栋号 */}
-        <View>
-          <View className='text-white text-sm mb-2'>楼栋号</View>
-          <View className='relative'>
-            <Input
-              type='text'
-              placeholder='请输入楼栋号'
-              className='w-full p-2 text-xs pl-10 rounded-lg bg-gray-900 text-white placeholder-gray-400 box-border'
-              value={form.building}
-              onInput={e => setForm(prev => ({ ...prev, building: e.detail.value }))}
-            />
-            <View className='absolute left-3 top-3.5 text-gray-400'>
-              <View className='i-carbon-building' />
+      <View className='px-4 flex-1 flex flex-col'>
+        <View className='flex-1 space-y-3 '>
+          {/* 楼栋号 */}
+          <View>
+            <View className='text-white text-xs mb-2'>楼栋号</View>
+            <View className='relative'>
+              <Input
+                type='text'
+                placeholder='请输入楼栋号'
+                placeholderStyle='color: #cbd5e0'
+                className='w-full p-2 text-xs pl-10 rounded-lg bg-gray-900 text-white placeholder-gray-400 box-border'
+                value={form.building}
+                onInput={e => setForm(prev => ({ ...prev, building: e.detail.value }))}
+              />
+              <View className='absolute left-3 top-1/2 text-gray-400 -translate-y-1/2'>
+                <View className='iconfont icon-a-01' />
+              </View>
             </View>
           </View>
-        </View>
 
-        {/* 门牌号 */}
-        <View>
-          <View className='text-white text-sm mb-2'>门牌号</View>
-          <View className='relative'>
-            <Input
-              type='text'
-              placeholder='请输入门牌号'
-              className='w-full p-2 text-xs pl-10 rounded-lg bg-gray-900 text-white placeholder-gray-400 box-border'
-              value={form.room}
-              onInput={e => setForm(prev => ({ ...prev, room: e.detail.value }))}
-            />
-            <View className='absolute left-3 top-3.5 text-gray-400'>
-              <View className='i-carbon-home' />
+          {/* 门牌号 */}
+          <View>
+            <View className='text-white text-xs mb-2'>门牌号</View>
+            <View className='relative'>
+              <Input
+                type='text'
+                placeholder='请输入门牌号'
+                placeholderClass='text-gray-400'
+                className='w-full p-2 text-xs pl-10 rounded-lg bg-gray-900 text-white placeholder-gray-400 box-border'
+                value={form.room}
+                onInput={e => setForm(prev => ({ ...prev, room: e.detail.value }))}
+              />
+              <View className='absolute left-3 top-1/2 text-gray-400 -translate-y-1/2'>
+                <View className='iconfont icon-xinpan' />
+              </View>
             </View>
           </View>
-        </View>
 
-        {/* 上门频率 */}
-        <View>
-          <View className='text-white text-sm mb-2'>上门频率</View>
-          <Button
-            className='w-full p-3 text-xs rounded-lg bg-gray-900 text-white text-left flex justify-between items-center m-0'
-            onClick={toggleFrequencyPopup}
-          >
-            <View className={`${form.frequency === '请选择上门频率' ? 'text-gray-400' : 'text-white'}`}>
-              {form.frequency}
+          {/* 上门频率 */}
+          <View>
+            <View className='text-white text-xs mb-2'>上门频率</View>
+
+            <View className='relative z-10' onClick={e => toggleFrequencyPopup(e)}>
+              <Input
+                type='text'
+                placeholder='请选择上门频率'
+                placeholderClass='text-gray-400'
+                className='w-full p-2 text-xs pl-10 rounded-lg bg-gray-900 text-white placeholder-gray-400 box-border'
+                value={form.frequency}
+                disabled
+              />
+              <View className='absolute w-full h-full top-0 z-10'></View>
+              <View className='absolute left-3 top-1/2 text-gray-400 -translate-y-1/2'>
+                <View className='iconfont icon-yuding' />
+              </View>
+
             </View>
-            <View className='i-carbon-chevron-down text-gray-400' />
-          </Button>
-        </View>
+          </View>
 
-        {/* 上门时间 */}
-        <View>
-          <View className='text-white text-sm mb-2'>上门时间</View>
-          <View className='grid grid-cols-4 gap-2'>
-            {timeSlots.map(time => (
-              <Button
-                key={time}
-                className={`px-4 py-2 rounded-lg text-xs font-medium transition-colors m-0 ${
-                  selectedTime === time
+          {/* 上门时间 */}
+          <View>
+            <View className='text-white text-xs mb-2'>上门时间</View>
+            <View className='grid grid-cols-4 gap-2'>
+              {timeSlots.map(time => (
+                <Button
+                  key={time}
+                  className={`px-4 py-2 rounded-lg text-xs font-medium transition-colors m-0 ${selectedTime === time
                     ? 'bg-brand text-white'
                     : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
-                }`}
-                onClick={() => handleTimeSelect(time)}
+                    }`}
+                  onClick={() => handleTimeSelect(time)}
+                >
+                  {time}
+                </Button>
+              ))}
+            </View>
+          </View>
+
+          {/* 上门方式 */}
+          <View>
+            <View className='text-white text-xs mb-2'>上门方式</View>
+            <View className='grid grid-cols-2 gap-4'>
+              <Button
+                className={`method-selector__option bg-gray-900 ${selectedMethod === 'doorbell' ? 'selected' : ''}`}
+                onClick={() => handleMethodSelect('doorbell')}
               >
-                {time}
+                <View className='method-selector__option-icon'>
+                  <View className='i-carbon-notification' />
+                </View>
+                <View className='method-selector__option-content'>
+                  <View className='method-selector__option-title'>按门铃</View>
+                  <View className='method-selector__option-desc'>到达后按门铃通知您</View>
+                </View>
               </Button>
-            ))}
+              <Button
+                className={`method-selector__option bg-gray-900 ${selectedMethod === 'silent' ? 'selected' : ''}`}
+                onClick={() => handleMethodSelect('silent')}
+              >
+                <View className='method-selector__option-icon'>
+                  <View className='i-carbon-time' />
+                </View>
+                <View className='method-selector__option-content'>
+                  <View className='method-selector__option-title'>静音模式</View>
+                  <View className='method-selector__option-desc'>到达后直接开始服务</View>
+                </View>
+              </Button>
+            </View>
           </View>
         </View>
-
-        {/* 上门方式 */}
-        <View>
-          <View className='text-white text-sm mb-2'>上门方式</View>
-          <View className='grid grid-cols-2 gap-4'>
-            <Button
-              className={`method-selector__option ${selectedMethod === 'doorbell' ? 'selected' : ''}`}
-              onClick={() => handleMethodSelect('doorbell')}
-            >
-              <View className='method-selector__option-icon'>
-                <View className='i-carbon-notification' />
-              </View>
-              <View className='method-selector__option-content'>
-                <View className='method-selector__option-title'>按门铃</View>
-                <View className='method-selector__option-desc'>到达后按门铃通知您</View>
-              </View>
-            </Button>
-            <Button
-              className={`method-selector__option ${selectedMethod === 'silent' ? 'selected' : ''}`}
-              onClick={() => handleMethodSelect('silent')}
-            >
-              <View className='method-selector__option-icon'>
-                <View className='i-carbon-time' />
-              </View>
-              <View className='method-selector__option-content'>
-                <View className='method-selector__option-title'>静音模式</View>
-                <View className='method-selector__option-desc'>到达后直接开始服务</View>
-              </View>
-            </Button>
-          </View>
-        </View>
-
         {/* 提交按钮 */}
         <Button
           className='w-full bg-brand text-white rounded-full font-medium hover:bg-opacity-90 transition-colors mt-6'

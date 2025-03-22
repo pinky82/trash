@@ -1,16 +1,16 @@
 .stats-card {
-  margin: 0 16px;
-  padding: 24px;
+  margin: 0 16PX;
+  padding: 24PX;
   background: linear-gradient(180deg, rgba(31,41,55,0.5) 0%, rgba(17,24,39,0.8) 100%);
-  border-radius: 16px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(31, 41, 55, 0.5);
-  margin-top: -32px;
+  border-radius: 16PX;
+  backdrop-filter: blur(10PX);
+  border: 1PX solid rgba(31, 41, 55, 0.5);
+  margin-top: -32PX;
   position: relative;
   z-index: 20;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
+  gap: 16PX;
 
   &__item {
     text-align: center;
@@ -23,7 +23,7 @@
   }
 
   &__value {
-    font-size: 24px;
+    font-size: 24PX;
     font-weight: 700;
     background: linear-gradient(to right, #FF9500, #FFD700);
     -webkit-background-clip: text;
@@ -31,8 +31,8 @@
   }
 
   &__label {
-    font-size: 12px;
+    font-size: 12PX;
     color: rgba(255, 255, 255, 0.4);
-    margin-top: 4px;
+    margin-top: 4PX;
   }
 } 

@@ -68,17 +68,17 @@ export default function Index() {
 
   const loadMoreData = () => {
     if (loading) return
-    
+
     setLoading(true)
     const start = page * itemsPerPage
     const end = start + itemsPerPage
     const newCommunities = mockCommunities.slice(start, end)
-    
+
     if (newCommunities.length === 0) {
       setLoading(false)
       return
     }
-    
+
     setTimeout(() => {
       setCommunities(prev => [...prev, ...newCommunities])
       setPage(prev => prev + 1)
@@ -99,24 +99,28 @@ export default function Index() {
   }
 
   return (
-    <View className='min-h-screen bg-black'>
+    <View className='h-full bg-black flex flex-col overflow-hidden'>
       <Header />
-      <SearchBar />
-      
-      <View className='p-4 space-y-4'>
-        {communities.map((community, index) => (
-          <CommunityCard
-            key={index}
-            {...community}
-            onAppointment={() => handleAppointment(community.id)}
-          />
-        ))}
-        
-        {loading && (
-          <View className='flex justify-center py-4'>
-            <View className='w-6 h-6 border-2 border-brand border-t-transparent rounded-full animate-spin'></View>
-          </View>
-        )}
+
+
+      <View className='px-4 flex-1 overflow-y-auto relative'>
+        <SearchBar />
+        <View className='space-y-2'>
+          {communities.map((community, index) => (
+            <CommunityCard
+              key={index}
+              {...community}
+              onAppointment={() => handleAppointment(community.id)}
+            />
+          ))}
+
+          {loading && (
+            <View className='flex justify-center py-4'>
+              <View className='w-6 h-6 border-2 border-brand border-t-transparent rounded-full animate-spin'></View>
+            </View>
+          )}
+        </View>
+
       </View>
 
       <BecomeRecycler onApply={handleApply} />

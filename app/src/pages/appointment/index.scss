@@ -29,7 +29,7 @@
   visibility: hidden;
   transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
   z-index: 40;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(4PX);
 }
 
 .frequency-popup-overlay.active {
@@ -90,19 +90,18 @@
 } 
 
 .image{
-  width: 88px;
-  height: 88px;
-  border-radius: 12px;
+  width: 88PX;
+  height: 88PX;
+  border-radius: 12PX;
   flex-shrink: 0;
   background: #2A2A2A;
 }
 
 .method-selector {
   &__option {
-    padding: 16px;
-    @apply bg-gray-900;
-    border-radius: 12px;
-    border: 2px solid transparent;
+    padding: 16PX;
+    border-radius: 12PX;
+    border: 2PX solid transparent;
     text-align: left;
     margin-top: 0;
     transition: all 0.3s ease;
@@ -113,24 +112,23 @@
 
     &.selected {
       border-color: #FF9500;
-      @apply bg-gray-900;
     }
   }
 
   &__option-icon {
-    margin-bottom: 8px;
+    margin-bottom: 8PX;
     color: #FF9500;
   }
 
   &__option-title {
-    font-size: 16px;
+    font-size: 16PX;
     font-weight: 500;
     color: #FFFFFF;
-    margin-bottom: 4px;
+    margin-bottom: 4PX;
   }
 
   &__option-desc {
-    font-size: 12px;
+    font-size: 12PX;
     color: rgba(255, 255, 255, 0.4);
   }
 }

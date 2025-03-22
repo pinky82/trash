@@ -11,7 +11,7 @@ interface CommunityCardProps {
 
 export const CommunityCard = ({ name, address, waitTime, image, onAppointment }: CommunityCardProps) => {
   return (
-    <View className='bg-gray-900 rounded-xl p-4'>
+    <View className='bg-gray-900 rounded-xl p-2'>
       <View className='flex'>
         <Image src={image} mode='aspectFill' className='community-card__image' />
         <View className='community-card__content'>

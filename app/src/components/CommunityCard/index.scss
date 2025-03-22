@@ -1,25 +1,25 @@
 .community-card {
   background: #1A1A1A;
-  border-radius: 16px;
-  padding: 16px;
-  margin-bottom: 12px;
+  border-radius: 16PX;
+  padding: 16PX;
+  margin-bottom: 12PX;
 
   &__image {
-    width: 88px;
-    height: 88px;
-    border-radius: 12px;
+    width: 88PX;
+    height: 88PX;
+    border-radius: 12PX;
     flex-shrink: 0;
     background: #2A2A2A;
   }
 
   &__content {
-    margin-left: 12px;
+    margin-left: 12PX;
     flex: 1;
     min-width: 0;
   }
 
   &__name {
-    font-size: 16px;
+    font-size: 16PX;
     font-weight: 500;
     color: #FFFFFF;
     word-break: break-all;
@@ -27,22 +27,22 @@
   }
 
   &__address {
-    font-size: 13px;
+    font-size: 14PX;
     color: rgba(255, 255, 255, 0.6);
-    margin-top: 4px;
+    margin-top: 4PX;
     word-break: break-all;
     white-space: normal;
   }
 
   &__footer {
-    margin-top: 8px;
+    margin-top: 8PX;
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
 
   &__wait-time {
-    font-size: 12px;
+    font-size: 12PX;
     color: rgba(255, 255, 255, 0.4);
     flex-shrink: 0;
   }
@@ -50,12 +50,12 @@
   &__button {
     background: #FF9500;
     color: #FFFFFF;
-    padding: 4px 16px;
-    border-radius: 14px;
-    font-size: 13px;
+    padding: 4PX 16PX;
+    border-radius: 14PX;
+    font-size: 14PX;
     font-weight: 500;
     flex-shrink: 0;
-    margin-left: 8px;
-    box-shadow: 0 2px 8px rgba(255, 149, 0, 0.2);
+    margin-left: 8PX;
+    box-shadow: 0 2PX 8PX rgba(255, 149, 0, 0.2);
   }
 } 

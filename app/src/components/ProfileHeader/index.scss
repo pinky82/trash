@@ -1,8 +1,8 @@
 .profile-header {
   &__gradient {
     background: linear-gradient(135deg, #FF9500 0%, #FF5733 100%);
-    padding: 32px;
-    padding-bottom: 64px;
+    padding: 32PX;
+    padding-bottom: 64PX;
     position: relative;
   }
 
@@ -24,13 +24,13 @@
   }
 
   &__avatar-wrapper {
-    width: 80px;
-    height: 80px;
-    border-radius: 16px;
+    width: 80PX;
+    height: 80PX;
+    border-radius: 16PX;
     background: #FFFFFF;
     overflow: hidden;
     transform: rotate(3deg);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4PX 12PX rgba(0, 0, 0, 0.1);
   }
 
   &__avatar {
@@ -39,36 +39,36 @@
   }
 
   &__info {
-    margin-left: 20px;
+    margin-left: 20PX;
   }
 
   &__name {
-    font-size: 24px;
+    font-size: 24PX;
     font-weight: 700;
     color: #FFFFFF;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.5PX;
   }
 
   &__badge {
     display: flex;
     align-items: center;
-    margin-top: 4px;
+    margin-top: 4PX;
   }
 
   &__badge-text {
-    font-size: 14px;
+    font-size: 14PX;
     color: #FFFFFF;
     background: rgba(0, 0, 0, 0.2);
-    padding: 4px 12px;
-    border-radius: 16px;
+    padding: 4PX 12PX;
+    border-radius: 16PX;
   }
 
   &__arrow {
-    width: 16px;
-    height: 16px;
-    margin-left: 8px;
-    border-right: 2px solid #FFFFFF;
-    border-bottom: 2px solid #FFFFFF;
+    width: 16PX;
+    height: 16PX;
+    margin-left: 8PX;
+    border-right: 2PX solid #FFFFFF;
+    border-bottom: 2PX solid #FFFFFF;
     transform: rotate(45deg);
   }
 } 

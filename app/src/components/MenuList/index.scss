@@ -1,13 +1,13 @@
 .menu-list {
-  margin: 24px 16px;
+  margin: 24PX 16PX;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 12PX;
 
   &__item {
     background: #1F2937;
-    border-radius: 16px;
-    padding: 16px;
+    border-radius: 16PX;
+    padding: 16PX;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -21,23 +21,23 @@
   &__left {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 16PX;
   }
 
   &__icon-wrapper {
-    width: 40px;
-    height: 40px;
-    border-radius: 20px;
+    width: 40PX;
+    height: 40PX;
+    border-radius: 20PX;
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
   &__icon {
-    width: 20px;
-    height: 20px;
-    border: 2px solid;
-    border-radius: 4px;
+    width: 20PX;
+    height: 20PX;
+    border: 2PX solid;
+    border-radius: 4PX;
   }
 
   &__text {
@@ -46,22 +46,22 @@
   }
 
   &__title {
-    font-size: 16px;
+    font-size: 16PX;
     font-weight: 500;
     color: #FFFFFF;
   }
 
   &__subtitle {
-    font-size: 12px;
+    font-size: 12PX;
     color: rgba(255, 255, 255, 0.4);
-    margin-top: 2px;
+    margin-top: 2PX;
   }
 
   &__arrow {
-    width: 20px;
-    height: 20px;
-    border-right: 2px solid rgba(255, 255, 255, 0.4);
-    border-bottom: 2px solid rgba(255, 255, 255, 0.4);
+    width: 20PX;
+    height: 20PX;
+    border-right: 2PX solid rgba(255, 255, 255, 0.4);
+    border-bottom: 2PX solid rgba(255, 255, 255, 0.4);
     transform: rotate(45deg);
   }
 } 

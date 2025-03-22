@@ -4,8 +4,8 @@
   left: 0;
   width: 100%;
   background-color: #000000;
-  border-top-left-radius: 24px;
-  border-top-right-radius: 24px;
+  border-top-left-radius: 24PX;
+  border-top-right-radius: 24PX;
   transform: translateY(100vh);
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 100;
@@ -18,37 +18,36 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 24px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 24PX;
+    border-bottom: 1PX solid rgba(255, 255, 255, 0.1);
   }
 
   &__title {
-    font-size: 18px;
+    font-size: 18PX;
     font-weight: 600;
     color: #FFFFFF;
   }
 
   &__close {
-    padding: 8px;
+    padding: 8PX;
     color: rgba(255, 255, 255, 0.4);
   }
 
   &__content {
-    padding: 24px;
+    padding: 24PX;
   }
 
   &__options {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-    margin-bottom: 24px;
+    gap: 16PX;
+    margin-bottom: 24PX;
   }
 
   &__option {
-    padding: 16px;
-    @apply bg-gray-900;
-    border-radius: 12px;
-    border: 2px solid transparent;
+    padding: 16PX;
+    border-radius: 12PX;
+    border: 2PX solid transparent;
     text-align: left;
     margin-top: 0;
     transition: all 0.3s ease;
@@ -59,52 +58,50 @@
 
     &.selected {
       border-color: #FF9500;
-      @apply bg-gray-900;
     }
   }
 
   &__option-icon {
-    margin-bottom: 8px;
+    margin-bottom: 8PX;
     color: #FF9500;
   }
 
   &__option-title {
-    font-size: 16px;
+    font-size: 16PX;
     font-weight: 500;
     color: #FFFFFF;
-    margin-bottom: 4px;
+    margin-bottom: 4PX;
   }
 
   &__option-desc {
-    font-size: 12px;
+    font-size: 12PX;
     color: rgba(255, 255, 255, 0.4);
   }
 
   &__regular {
-    margin-top: 24px;
+    margin-top: 24PX;
   }
 
   &__regular-title {
-    font-size: 16px;
+    font-size: 16PX;
     font-weight: 500;
     color: #FFFFFF;
-    margin-bottom: 16px;
+    margin-bottom: 16PX;
   }
 
   &__regular-days {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 8px;
+    gap: 8PX;
   }
 
   &__regular-day {
-    width: 40px;
-    height: 40px;
-    border-radius: 20px;
-    font-size: 14px;
+    width: 40PX;
+    height: 40PX;
+    border-radius: 20PX;
+    font-size: 14PX;
     font-weight: 500;
     color: rgba(255, 255, 255, 0.4);
-    @apply bg-gray-900;
     transition: all 0.3s ease;
 
     &.selected {
@@ -114,54 +111,53 @@
   }
 
   &__calendar {
-    margin-top: 24px;
+    margin-top: 24PX;
   }
 
   &__calendar-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 16px;
+    margin-bottom: 16PX;
   }
 
   &__calendar-title {
-    font-size: 16px;
+    font-size: 16PX;
     font-weight: 500;
     color: #FFFFFF;
   }
 
   &__calendar-nav {
-    padding: 8px;
+    padding: 8PX;
     color: rgba(255, 255, 255, 0.4);
   }
 
   &__calendar-weekdays {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 8px;
-    margin-bottom: 8px;
+    gap: 8PX;
+    margin-bottom: 8PX;
   }
 
   &__calendar-weekday {
     text-align: center;
-    font-size: 12px;
+    font-size: 12PX;
     color: rgba(255, 255, 255, 0.4);
   }
 
   &__calendar-days {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 8px;
+    gap: 8PX;
   }
 
   &__calendar-day {
-    width: 40px;
-    height: 40px;
-    border-radius: 20px;
-    font-size: 14px;
+    width: 40PX;
+    height: 40PX;
+    border-radius: 20PX;
+    font-size: 14PX;
     font-weight: 500;
     color: rgba(255, 255, 255, 0.4);
-    @apply bg-gray-900;
     transition: all 0.3s ease;
 
     &.empty {
@@ -169,7 +165,6 @@
     }
 
     &.today {
-      @apply bg-gray-900;
       color: #FFFFFF;
     }
 
@@ -181,13 +176,13 @@
 
   &__confirm {
     width: 100%;
-    height: 48px;
+    height: 48PX;
     background-color: #FF9500;
     color: #FFFFFF;
-    border-radius: 24px;
-    font-size: 16px;
+    border-radius: 24PX;
+    font-size: 16PX;
     font-weight: 500;
-    margin-top: 24px;
+    margin-top: 24PX;
     transition: all 0.3s ease;
 
     &:active {

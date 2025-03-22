@@ -107,7 +107,7 @@ export const FrequencySelector = ({ value, onChange, onClose, visible }: Frequen
                         return (
                             <Button
                                 key={index}
-                                className={`frequency-selector__calendar-day  mt-2 ${isSelected ? 'selected' : isToday ? 'today' : ''
+                                className={`frequency-selector__calendar-day bg-gray-900 p-0  mt-2 ${isSelected ? 'selected' : isToday ? 'today' : ''
                                     }`}
                                 onClick={() => handleDateSelect(date)}
                             >
@@ -129,7 +129,7 @@ export const FrequencySelector = ({ value, onChange, onClose, visible }: Frequen
             <View className='frequency-selector__content'>
                 <View className='frequency-selector__options'>
                     <Button
-                        className={`frequency-selector__option ${currentType === '指定服务' ? 'selected' : ''}`}
+                        className={`frequency-selector__option bg-gray-900 ${currentType === '指定服务' ? 'selected' : ''}`}
                         onClick={() => handleFrequencySelect('指定服务')}
                     >
                         <View className='frequency-selector__option-icon'>
@@ -141,7 +141,7 @@ export const FrequencySelector = ({ value, onChange, onClose, visible }: Frequen
                         </View>
                     </Button>
                     <Button
-                        className={`frequency-selector__option ${currentType === '定期服务' ? 'selected' : ''}`}
+                        className={`frequency-selector__option bg-gray-900 ${currentType === '定期服务' ? 'selected' : ''}`}
                         onClick={() => handleFrequencySelect('定期服务')}
                     >
                         <View className='frequency-selector__option-icon'>
@@ -161,7 +161,7 @@ export const FrequencySelector = ({ value, onChange, onClose, visible }: Frequen
                                 {weekDays.map(day => (
                                     <Button
                                         key={day}
-                                        className={`frequency-selector__regular-day mt-0 ${selectedDays.includes(day) ? 'selected' : ''
+                                        className={`frequency-selector__regular-day mt-0 p-0 bg-gray-900 ${selectedDays.includes(day) ? 'selected' : ''
                                             }`}
                                         onClick={() => handleDaySelect(day)}
                                     >

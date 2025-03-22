@@ -11,7 +11,7 @@ export default function Profile() {
   })
 
   return (
-    <View className='profile'>
+    <View className='profile min-h-full'>
       <ProfileHeader 
         avatar='https://placekitten.com/200/200'
         username='张三'

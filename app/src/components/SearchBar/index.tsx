@@ -3,7 +3,7 @@ import './index.scss'
 
 export const SearchBar = () => {
   return (
-    <View className='px-4 bg-black box-border pt-[60px]'>
+    <View className='bg-black box-border search-bar sticky top-0 z-10 pb-2'>
       <View className='search-bar__container'>
         <Input
           type='text'
@@ -11,7 +11,10 @@ export const SearchBar = () => {
           className='search-bar__input'
           style={{ height: '44px', lineHeight: '44px' }}
         />
-        <View className='search-bar__icon'></View>
+        <View className='absolute left-3 top-1/2 text-gray-400 -translate-y-1/2'>
+          <View className='iconfont icon-sousuo'></View>
+        </View>
+
       </View>
     </View>
   )
