@@ -42,8 +42,6 @@ export class CommunityController {
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
   @ApiOperation({ summary: '获取指定小区' })
   findOne(@Param('id') id: string) {
     return this.communityService.findOne(+id);

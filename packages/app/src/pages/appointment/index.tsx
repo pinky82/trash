@@ -4,6 +4,7 @@ import { useRouter } from '@tarojs/taro'
 import { FrequencySelector } from '../../components/FrequencySelector'
 import './index.scss'
 import SafeView from '@/components/SafeView'
+import { communityService } from '@/services/community'
 
 
 interface CommunityInfo {
@@ -21,20 +22,6 @@ interface AppointmentForm {
   method: 'doorbell' | 'silent'
 }
 
-const mockCommunities: Record<string, CommunityInfo> = {
-  '1': {
-    id: '1',
-    name: '阳光小区',
-    address: '浦东新区张杨路500号',
-    image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00'
-  },
-  '2': {
-    id: '2',
-    name: '和平花园',
-    address: '浦东新区陆家嘴环路1000号',
-    image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00'
-  }
-}
 
 const Appointment = () => {
   const router = useRouter()
@@ -55,16 +42,13 @@ const Appointment = () => {
   const [showTime, setShowTime] = useState(false)
   const [showMethod, setShowMethod] = useState(false)
   const [communityInfo, setCommunityInfo] = useState<CommunityInfo | null>(null)
-
   // 获取路由参数
+  console.log(router)
   useEffect(() => {
-    // if (router.params?.id) {
-      const community = mockCommunities['1']
-      if (community) {
-        setCommunityInfo(community)
-      }
-    // }
-  }, [])
+    if (router.params.id) {
+      fetchCommunityDetail(router.params.id)
+    }
+  }, [router.params.id])
 
   const timeSlots = [
     '09:00', '10:00', '11:00', '12:00',
@@ -95,8 +79,20 @@ const Appointment = () => {
     console.log('Form submitted:', form)
   }
 
+
+  const fetchCommunityDetail = async (id: string) => {
+    const data = await communityService.getCommunityDetail(id)
+
+    setCommunityInfo({
+      id,
+      address: data.address,
+      image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00', // 模拟数据
+      name: data.name || ''
+    })
+  }
+
   return (
-    <View className='h-[100vh] bg-black pb-4 pt-2 box-border flex flex-col  overflow-y-auto'>
+    <View className='h-[100vh] bg-black pb-4 pt-2 box-border flex flex-col overflow-y-auto'>
       {/* 小区信息 */}
       <View className='p-4 pt-0'>
         <View className='bg-gray-900 rounded-xl p-2'>

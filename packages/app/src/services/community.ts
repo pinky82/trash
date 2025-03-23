@@ -48,9 +48,9 @@ export const communityService = {
    * 获取社区详情
    * @param id 社区ID
    */
-  getCommunityDetail: async (id: number): Promise<ApiResponse<Community>> => {
+  getCommunityDetail: async (id: string): Promise<Community> => {
     try {
-      const response = await request.get<ApiResponse<Community>>(`/communities/${id}`);
+      const response = await request.get<Community>(`/communities/${id}`);
       return response.data;
     } catch (error) {
       console.error('获取社区详情错误:', error);
