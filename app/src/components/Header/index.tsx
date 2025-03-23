@@ -1,10 +1,14 @@
 import { View, Text } from '@tarojs/components'
-import { useState } from 'react'
+import { useState, forwardRef } from 'react'
 import Taro from '@tarojs/taro'
 import './index.scss'
+import { useSystemInfo } from '@/hooks/useSystemInfo'
 
-export const Header = () => {
+export const Header = forwardRef((__props, ref) => {
+
+  const { isMiniProgram, menuButtonInfo } = useSystemInfo()
   const [location, setLocation] = useState('上海市')
+
 
   const handleLocationClick = () => {
     Taro.chooseLocation({
@@ -18,12 +22,15 @@ export const Header = () => {
     })
   }
 
+
   return (
-    <View className='header'>
+    <View className='header' style={{ top: isMiniProgram && menuButtonInfo ? menuButtonInfo.top : 0 }} ref={ref}>
       <View className='header__location' onClick={handleLocationClick}>
         <Text className='header__city'>{location}</Text>
         <View className='header__arrow'></View>
       </View>
     </View>
   )
-} 
+})
+
+Header.displayName = 'Header'

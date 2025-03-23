@@ -27,7 +27,8 @@
     "dev:rn": "npm run build:rn -- --watch",
     "dev:qq": "npm run build:qq -- --watch",
     "dev:jd": "npm run build:jd -- --watch",
-    "dev:harmony-hybrid": "npm run build:harmony-hybrid -- --watch"
+    "dev:harmony-hybrid": "npm run build:harmony-hybrid -- --watch",
+    "postinstall": "weapp-tw patch"
   },
   "browserslist": [
     "defaults and fully supports es6-module",
@@ -78,6 +79,7 @@
     "tailwindcss": "3",
     "tsconfig-paths-webpack-plugin": "^4.1.0",
     "typescript": "^5.4.5",
+    "weapp-tailwindcss": "^4.1.0",
     "webpack": "5.91.0"
   }
 }

@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import Taro from '@tarojs/taro'
 // import '../../styles/iconfont.scss'
 import './index.scss'
+import SafeView from '@/components/SafeView'
 
 interface ApplicationForm {
   name: string
@@ -32,7 +33,7 @@ const Application = () => {
   }
 
   return (
-    <View className='min-h-full bg-black py-4 pt-2 box-border flex flex-col'>
+    <View className='h-screen bg-black py-4 pt-2 box-border flex flex-col  overflow-y-auto'>
       {/* 头部信息 */}
       <View className='p-4 pt-2'>
         <View className='bg-gradient-to-r from-brand to-brand-light rounded-xl p-4'>
@@ -56,6 +57,7 @@ const Application = () => {
                 placeholder='请输入真实姓名'
                 className='w-full p-2 text-xs pl-10 rounded-lg bg-gray-900 text-white placeholder-gray-400 box-border'
                 value={form.name}
+                style={{ height: '44px', lineHeight: '44px' }}
                 onInput={e => setForm(prev => ({ ...prev, name: e.detail.value }))}
               />
 
@@ -74,6 +76,7 @@ const Application = () => {
                 placeholder='请输入手机号'
                 className='w-full p-2 text-xs pl-10 rounded-lg bg-gray-900 text-white placeholder-gray-400 box-border'
                 value={form.phone}
+                style={{ height: '44px', lineHeight: '44px' }}
                 onInput={e => setForm(prev => ({ ...prev, phone: e.detail.value }))}
               />
               <View className='absolute left-3 top-1/2 text-gray-400 -translate-y-1/2'>
@@ -91,6 +94,7 @@ const Application = () => {
                 placeholder='请输入身份证号'
                 className='w-full p-2 text-xs pl-10 rounded-lg bg-gray-900 text-white placeholder-gray-400 box-border'
                 value={form.idCard}
+                style={{ height: '44px', lineHeight: '44px' }}
                 onInput={e => setForm(prev => ({ ...prev, idCard: e.detail.value }))}
               />
               <View className='absolute left-3 top-1/2 text-gray-400 -translate-y-1/2'>
@@ -106,6 +110,7 @@ const Application = () => {
               <Input
                 type='text'
                 placeholder='请输入详细居住地址'
+                style={{ height: '44px', lineHeight: '44px' }}
                 className='w-full p-2 text-xs pl-10 rounded-lg bg-gray-900 text-white placeholder-gray-400 box-border'
                 value={form.address}
                 onInput={e => setForm(prev => ({ ...prev, address: e.detail.value }))}
@@ -125,6 +130,7 @@ const Application = () => {
         >
           提交申请
         </Button>
+        <SafeView />
       </View>
     </View>
   )

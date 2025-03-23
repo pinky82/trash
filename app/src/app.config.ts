@@ -19,10 +19,14 @@ export default defineAppConfig({
     list: [
       {
         pagePath: 'pages/index/index',
+        iconPath: './assets/images/home.png',
+        selectedIconPath: './assets/images/home-active.png',
         text: '首页'
       },
       {
         pagePath: 'pages/profile/index',
+        iconPath: './assets/images/profile.png',
+        selectedIconPath: './assets/images/profile-active.png',
         text: '我的'
       }
     ]

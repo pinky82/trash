@@ -3,7 +3,7 @@ import './index.scss'
 
 export const SearchBar = () => {
   return (
-    <View className='bg-black box-border search-bar sticky top-0 z-10 pb-2'>
+    <View className='search-bar sticky top-0 z-10 pb-2 bg-black'>
       <View className='search-bar__container'>
         <Input
           type='text'

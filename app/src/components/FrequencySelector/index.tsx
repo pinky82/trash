@@ -129,7 +129,7 @@ export const FrequencySelector = ({ value, onChange, onClose, visible }: Frequen
             <View className='frequency-selector__content'>
                 <View className='frequency-selector__options'>
                     <Button
-                        className={`frequency-selector__option bg-gray-900 ${currentType === '指定服务' ? 'selected' : ''}`}
+                        className={`frequency-selector__option bg-gray-900 w-full ${currentType === '指定服务' ? 'selected' : ''}`}
                         onClick={() => handleFrequencySelect('指定服务')}
                     >
                         <View className='frequency-selector__option-icon'>
@@ -141,7 +141,7 @@ export const FrequencySelector = ({ value, onChange, onClose, visible }: Frequen
                         </View>
                     </Button>
                     <Button
-                        className={`frequency-selector__option bg-gray-900 ${currentType === '定期服务' ? 'selected' : ''}`}
+                        className={`frequency-selector__option bg-gray-900 w-full ${currentType === '定期服务' ? 'selected' : ''}`}
                         onClick={() => handleFrequencySelect('定期服务')}
                     >
                         <View className='frequency-selector__option-icon'>

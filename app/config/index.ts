@@ -2,7 +2,7 @@ import { defineConfig, type UserConfigExport } from '@tarojs/cli'
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin'
 import devConfig from './dev'
 import prodConfig from './prod'
-
+import { UnifiedWebpackPluginV5 } from 'weapp-tailwindcss/webpack'
 // https://taro-docs.jd.com/docs/next/config#defineconfig-辅助函数
 export default defineConfig<'webpack5'>(async (merge, { command, mode }) => {
   const baseConfig: UserConfigExport<'webpack5'> = {
@@ -48,6 +48,18 @@ export default defineConfig<'webpack5'>(async (merge, { command, mode }) => {
         }
       },
       webpackChain(chain) {
+          chain.merge({
+            plugin: {
+              install: {
+                plugin: UnifiedWebpackPluginV5,
+                args: [{
+                  appType: 'taro',
+                  // 下面个配置，会开启 rem -> rpx 的转化
+                  rem2rpx: true
+                }]
+              }
+            }
+          })
         chain.resolve.plugin('tsconfig-paths').use(TsconfigPathsPlugin)
       }
     },

@@ -15,7 +15,6 @@ export default function Profile() {
       <ProfileHeader 
         avatar='https://placekitten.com/200/200'
         username='张三'
-        memberLevel='黄金会员'
       />
       <StatsCard 
         stats={[

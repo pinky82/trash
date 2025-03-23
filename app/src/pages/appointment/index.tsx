@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from '@tarojs/taro'
 import { FrequencySelector } from '../../components/FrequencySelector'
 import './index.scss'
+import SafeView from '@/components/SafeView'
 
 
 interface CommunityInfo {
@@ -57,13 +58,13 @@ const Appointment = () => {
 
   // 获取路由参数
   useEffect(() => {
-    if (router.params?.id) {
-      const community = mockCommunities[router.params.id]
+    // if (router.params?.id) {
+      const community = mockCommunities['1']
       if (community) {
         setCommunityInfo(community)
       }
-    }
-  }, [router.params])
+    // }
+  }, [])
 
   const timeSlots = [
     '09:00', '10:00', '11:00', '12:00',
@@ -95,19 +96,19 @@ const Appointment = () => {
   }
 
   return (
-    <View className='min-h-full bg-black pb-4 pt-2 box-border flex flex-col'>
+    <View className='h-[100vh] bg-black pb-4 pt-2 box-border flex flex-col  overflow-y-auto'>
       {/* 小区信息 */}
       <View className='p-4 pt-0'>
         <View className='bg-gray-900 rounded-xl p-2'>
           <View className='flex'>
             <Image
-              src={communityInfo?.image || ''}
+              src={communityInfo && communityInfo.image || ''}
               className='rounded-lg object-cover image'
               mode='aspectFill'
             />
             <View className='ml-4 flex-1'>
-              <View className='text-base font-medium text-white'>{communityInfo?.name}</View>
-              <View className='text-gray-400 text-xs mt-1'>{communityInfo?.address}</View>
+              <View className='text-base font-medium text-white'>{communityInfo && communityInfo.name}</View>
+              <View className='text-gray-400 text-xs mt-1'>{communityInfo && communityInfo.address}</View>
             </View>
           </View>
         </View>
@@ -123,9 +124,10 @@ const Appointment = () => {
               <Input
                 type='text'
                 placeholder='请输入楼栋号'
-                placeholderStyle='color: #cbd5e0'
+                placeholderClass='text-gray-400'
                 className='w-full p-2 text-xs pl-10 rounded-lg bg-gray-900 text-white placeholder-gray-400 box-border'
                 value={form.building}
+                style={{ height: '44px', lineHeight: '44px' }}
                 onInput={e => setForm(prev => ({ ...prev, building: e.detail.value }))}
               />
               <View className='absolute left-3 top-1/2 text-gray-400 -translate-y-1/2'>
@@ -144,6 +146,7 @@ const Appointment = () => {
                 placeholderClass='text-gray-400'
                 className='w-full p-2 text-xs pl-10 rounded-lg bg-gray-900 text-white placeholder-gray-400 box-border'
                 value={form.room}
+                style={{ height: '44px', lineHeight: '44px' }}
                 onInput={e => setForm(prev => ({ ...prev, room: e.detail.value }))}
               />
               <View className='absolute left-3 top-1/2 text-gray-400 -translate-y-1/2'>
@@ -163,6 +166,7 @@ const Appointment = () => {
                 placeholderClass='text-gray-400'
                 className='w-full p-2 text-xs pl-10 rounded-lg bg-gray-900 text-white placeholder-gray-400 box-border'
                 value={form.frequency}
+                style={{ height: '44px', lineHeight: '44px' }}
                 disabled
               />
               <View className='absolute w-full h-full top-0 z-10'></View>
@@ -197,7 +201,7 @@ const Appointment = () => {
             <View className='text-white text-xs mb-2'>上门方式</View>
             <View className='grid grid-cols-2 gap-4'>
               <Button
-                className={`method-selector__option bg-gray-900 ${selectedMethod === 'doorbell' ? 'selected' : ''}`}
+                className={`method-selector__option bg-gray-900 w-full ${selectedMethod === 'doorbell' ? 'selected' : ''}`}
                 onClick={() => handleMethodSelect('doorbell')}
               >
                 <View className='method-selector__option-icon'>
@@ -209,7 +213,7 @@ const Appointment = () => {
                 </View>
               </Button>
               <Button
-                className={`method-selector__option bg-gray-900 ${selectedMethod === 'silent' ? 'selected' : ''}`}
+                className={`method-selector__option bg-gray-900 w-full ${selectedMethod === 'silent' ? 'selected' : ''}`}
                 onClick={() => handleMethodSelect('silent')}
               >
                 <View className='method-selector__option-icon'>
@@ -230,6 +234,7 @@ const Appointment = () => {
         >
           确认预约
         </Button>
+        <SafeView />
       </View>
 
       {/* 频率选择弹窗 */}

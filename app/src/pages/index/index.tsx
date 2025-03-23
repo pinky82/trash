@@ -1,5 +1,5 @@
 import { View, Image, Button } from '@tarojs/components'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { Header } from '../../components/Header'
 import { SearchBar } from '../../components/SearchBar'
 import { CommunityCard } from '../../components/CommunityCard'
@@ -7,6 +7,7 @@ import { BecomeRecycler } from '../../components/BecomeRecycler'
 import { useLoad } from '@tarojs/taro'
 import Taro from '@tarojs/taro'
 import './index.scss'
+import { useSystemInfo } from '@/hooks/useSystemInfo'
 
 interface Community {
   id: string
@@ -49,6 +50,8 @@ const mockCommunities: Community[] = [
 
 export default function Index() {
   const [communities, setCommunities] = useState<Community[]>([])
+  const [headerBoundingClientRect, setHeaderBoundingClientRect] = useState<any>(null)
+  const headerRef = useRef<any>(null)
   const [loading, setLoading] = useState(false)
   const [page, setPage] = useState(1)
   const itemsPerPage = 4
@@ -98,13 +101,25 @@ export default function Index() {
     })
   }
 
+  useEffect(() => {
+    const query = Taro.createSelectorQuery()
+    query.select('.header').boundingClientRect(res => {
+      setHeaderBoundingClientRect(res)
+    }).exec()
+  }, [])
+
+  const headerHeight = useMemo(() => {
+    if(!headerBoundingClientRect) return 0
+    return headerBoundingClientRect.height + headerBoundingClientRect.top
+  }, [headerBoundingClientRect])
+
   return (
-    <View className='h-full bg-black flex flex-col overflow-hidden'>
-      <Header />
+    <View className='h-screen bg-black flex flex-col overflow-hidden'>
+      <Header ref={headerRef} />
 
 
-      <View className='px-4 flex-1 overflow-y-auto relative'>
-        <SearchBar />
+      <View className='px-4 flex-1 overflow-y-auto relative' style={{ marginTop: headerHeight }}>
+        <SearchBar/>
         <View className='space-y-2'>
           {communities.map((community, index) => (
             <CommunityCard
