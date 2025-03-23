@@ -6,19 +6,19 @@ import { UnifiedWebpackPluginV5 } from 'weapp-tailwindcss/webpack'
 // https://taro-docs.jd.com/docs/next/config#defineconfig-辅助函数
 export default defineConfig<'webpack5'>(async (merge, { command, mode }) => {
   const baseConfig: UserConfigExport<'webpack5'> = {
-    projectName: 'app',
-    date: '2025-3-22',
+    projectName: 'trash',
+    date: '2024-3-23',
     designWidth: 750,
     deviceRatio: {
       640: 2.34 / 2,
       750: 1,
-      375: 2,
       828: 1.81 / 2
     },
     sourceRoot: 'src',
     outputRoot: 'dist',
     plugins: [],
     defineConstants: {
+      NODE_ENV: JSON.stringify(process.env.NODE_ENV)
     },
     copy: {
       patterns: [
@@ -39,10 +39,16 @@ export default defineConfig<'webpack5'>(async (merge, { command, mode }) => {
 
           }
         },
-        cssModules: {
-          enable: false, // 默认为 false，如需使用 css modules 功能，则设为 true
+        url: {
+          enable: true,
           config: {
-            namingPattern: 'module', // 转换模式，取值为 global/module
+            limit: 1024
+          }
+        },
+        cssModules: {
+          enable: false,
+          config: {
+            namingPattern: 'module',
             generateScopedName: '[name]__[local]___[hash:base64:5]'
           }
         }
@@ -81,9 +87,9 @@ export default defineConfig<'webpack5'>(async (merge, { command, mode }) => {
           config: {}
         },
         cssModules: {
-          enable: false, // 默认为 false，如需使用 css modules 功能，则设为 true
+          enable: false,
           config: {
-            namingPattern: 'module', // 转换模式，取值为 global/module
+            namingPattern: 'module',
             generateScopedName: '[name]__[local]___[hash:base64:5]'
           }
         }
