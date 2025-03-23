@@ -11,7 +11,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, value }) => {
   const [inputValue, setInputValue] = useState(value)
 
   const onConfirm = (e: any) => {
-    const newValue = e.detail.value
+    // const newValue = e.detail.values
 
     onSearch(inputValue)
   }

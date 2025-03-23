@@ -23,7 +23,7 @@ export const locationUtil = {
         });
       }
 
-      const res = await Taro.chooseLocation();
+      const res = await Taro.chooseLocation({});
       return {
         latitude: res.latitude,
         longitude: res.longitude,

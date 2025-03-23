@@ -116,6 +116,10 @@ class Request {
     Taro.setStorageSync('token', token);
   }
 
+  public getToken(): string | null {
+    return this.token || Taro.getStorageSync('token');
+  }
+
   public clearToken(): void {
     this.token = null;
     Taro.removeStorageSync('token');
@@ -145,9 +149,6 @@ class Request {
     // 处理401未授权
     if (response.statusCode === 401) {
       this.clearToken();
-      Taro.navigateTo({
-        url: '/pages/login/index'
-      });
       throw new Error('未授权，请重新登录');
     }
 
@@ -176,54 +177,6 @@ class Request {
       console.error('请求错误:', error);
       throw error;
     }
-  }
-
-  // GET请求
-  public get<T = any>(url: string, options: Omit<RequestOptions, 'url' | 'method'> = {}): Promise<T> {
-    return this.request({
-      url,
-      method: 'GET',
-      ...options,
-    });
-  }
-
-  // POST请求
-  public post<T = any>(url: string, data?: any, options: Omit<RequestOptions, 'url' | 'method' | 'data'> = {}): Promise<T> {
-    return this.request({
-      url,
-      method: 'POST',
-      data,
-      ...options,
-    });
-  }
-
-  // PUT请求
-  public put<T = any>(url: string, data?: any, options: Omit<RequestOptions, 'url' | 'method' | 'data'> = {}): Promise<T> {
-    return this.request({
-      url,
-      method: 'PUT',
-      data,
-      ...options,
-    });
-  }
-
-  // PATCH请求
-  public patch<T = any>(url: string, data?: any, options: Omit<RequestOptions, 'url' | 'method' | 'data'> = {}): Promise<T> {
-    return this.request({
-      url,
-      method: 'PATCH',
-      data,
-      ...options,
-    });
-  }
-
-  // DELETE请求
-  public delete<T = any>(url: string, options: Omit<RequestOptions, 'url' | 'method'> = {}): Promise<T> {
-    return this.request({
-      url,
-      method: 'DELETE',
-      ...options,
-    });
   }
 }
 

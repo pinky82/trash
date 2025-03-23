@@ -5,29 +5,46 @@ import { FrequencySelector } from '../../components/FrequencySelector'
 import './index.scss'
 import SafeView from '@/components/SafeView'
 import { communityService } from '@/services/community'
+import {
+  AppointmentForm,
+  AppointmentMethod,
+  AppointmentTimeSlot,
+  AppointmentFrequency,
+  CommunityWithUI,
+  AppointmentMethodOption
+} from '@/types/appointment'
 
+const TIME_SLOTS: AppointmentTimeSlot[] = [
+  { time: '09:00', isAvailable: true },
+  { time: '10:00', isAvailable: true },
+  { time: '11:00', isAvailable: true },
+  { time: '12:00', isAvailable: true },
+  { time: '13:00', isAvailable: true },
+  { time: '14:00', isAvailable: true },
+  { time: '15:00', isAvailable: true },
+  { time: '16:00', isAvailable: true }
+]
 
-interface CommunityInfo {
-  id: string
-  name: string
-  address: string
-  image: string
-}
-
-interface AppointmentForm {
-  building: string
-  room: string
-  frequency: string
-  time: string
-  method: 'doorbell' | 'silent'
-}
-
+const METHOD_OPTIONS: AppointmentMethodOption[] = [
+  {
+    value: 'doorbell',
+    title: '按门铃',
+    description: '到达后按门铃通知您',
+    icon: 'i-carbon-notification'
+  },
+  {
+    value: 'silent',
+    title: '静音模式',
+    description: '到达后直接开始服务',
+    icon: 'i-carbon-time'
+  }
+]
 
 const Appointment = () => {
   const router = useRouter()
   const [showFrequencyPopup, setShowFrequencyPopup] = useState(false)
   const [selectedTime, setSelectedTime] = useState('')
-  const [selectedMethod, setSelectedMethod] = useState<'doorbell' | 'silent'>('doorbell')
+  const [selectedMethod, setSelectedMethod] = useState<AppointmentMethod>('doorbell')
   const [form, setForm] = useState<AppointmentForm>({
     building: '',
     room: '',
@@ -36,24 +53,15 @@ const Appointment = () => {
     method: 'doorbell'
   })
   const [frequency, setFrequency] = useState('')
-  const [time, setTime] = useState('')
-  const [method, setMethod] = useState('')
   const [showFrequency, setShowFrequency] = useState(false)
-  const [showTime, setShowTime] = useState(false)
-  const [showMethod, setShowMethod] = useState(false)
-  const [communityInfo, setCommunityInfo] = useState<CommunityInfo | null>(null)
+  const [communityInfo, setCommunityInfo] = useState<CommunityWithUI | null>(null)
   // 获取路由参数
   console.log(router)
   useEffect(() => {
-    if (router.params.id) {
+    if (router.params?.id) {
       fetchCommunityDetail(router.params.id)
     }
-  }, [router.params.id])
-
-  const timeSlots = [
-    '09:00', '10:00', '11:00', '12:00',
-    '13:00', '14:00', '15:00', '16:00'
-  ]
+  }, [router.params?.id])
 
   const toggleFrequencyPopup = (e: any) => {
     e.stopPropagation()
@@ -69,7 +77,7 @@ const Appointment = () => {
     setForm(prev => ({ ...prev, time }))
   }
 
-  const handleMethodSelect = (method: 'doorbell' | 'silent') => {
+  const handleMethodSelect = (method: AppointmentMethod) => {
     setSelectedMethod(method)
     setForm(prev => ({ ...prev, method }))
   }
@@ -79,16 +87,16 @@ const Appointment = () => {
     console.log('Form submitted:', form)
   }
 
-
   const fetchCommunityDetail = async (id: string) => {
-    const data = await communityService.getCommunityDetail(id)
-
-    setCommunityInfo({
-      id,
-      address: data.address,
-      image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00', // 模拟数据
-      name: data.name || ''
-    })
+    try {
+      const data = await communityService.getCommunityDetail(id)
+      setCommunityInfo({
+        ...data,
+        image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00' // 模拟数据
+      })
+    } catch (error) {
+      console.error('获取小区详情错误:', error)
+    }
   }
 
   return (
@@ -98,13 +106,16 @@ const Appointment = () => {
         <View className='bg-gray-900 rounded-xl p-2'>
           <View className='flex'>
             <Image
-              src={communityInfo && communityInfo.image || ''}
+              src={communityInfo?.image || ''}
               className='rounded-lg object-cover image'
               mode='aspectFill'
             />
             <View className='ml-4 flex-1'>
-              <View className='text-base font-medium text-white'>{communityInfo && communityInfo.name}</View>
-              <View className='text-gray-400 text-xs mt-1'>{communityInfo && communityInfo.address}</View>
+              <View className='text-base font-medium text-white'>{communityInfo?.name}</View>
+              <View className='text-gray-400 text-xs mt-1'>{communityInfo?.address}</View>
+              {communityInfo?.distance && (
+                <View className='text-gray-400 text-xs mt-1'>距离：{communityInfo.distance}km</View>
+              )}
             </View>
           </View>
         </View>
@@ -112,7 +123,7 @@ const Appointment = () => {
 
       {/* 表单 */}
       <View className='px-4 flex-1 flex flex-col'>
-        <View className='flex-1 space-y-3 '>
+        <View className='flex-1 space-y-3'>
           {/* 楼栋号 */}
           <View>
             <View className='text-white text-xs mb-2'>楼栋号</View>
@@ -154,8 +165,7 @@ const Appointment = () => {
           {/* 上门频率 */}
           <View>
             <View className='text-white text-xs mb-2'>上门频率</View>
-
-            <View className='relative z-10' onClick={e => toggleFrequencyPopup(e)}>
+            <View className='relative z-10' onClick={toggleFrequencyPopup}>
               <Input
                 type='text'
                 placeholder='请选择上门频率'
@@ -169,7 +179,6 @@ const Appointment = () => {
               <View className='absolute left-3 top-1/2 text-gray-400 -translate-y-1/2'>
                 <View className='iconfont icon-yuding' />
               </View>
-
             </View>
           </View>
 
@@ -177,16 +186,18 @@ const Appointment = () => {
           <View>
             <View className='text-white text-xs mb-2'>上门时间</View>
             <View className='grid grid-cols-4 gap-2'>
-              {timeSlots.map(time => (
+              {TIME_SLOTS.map(slot => (
                 <Button
-                  key={time}
-                  className={`px-4 py-2 rounded-lg text-xs font-medium transition-colors m-0 ${selectedTime === time
-                    ? 'bg-brand text-white'
-                    : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
-                    }`}
-                  onClick={() => handleTimeSelect(time)}
+                  key={slot.time}
+                  className={`px-4 py-2 rounded-lg text-xs font-medium transition-colors m-0 ${
+                    selectedTime === slot.time
+                      ? 'bg-brand text-white'
+                      : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+                  }`}
+                  onClick={() => handleTimeSelect(slot.time)}
+                  disabled={!slot.isAvailable}
                 >
-                  {time}
+                  {slot.time}
                 </Button>
               ))}
             </View>
@@ -196,30 +207,23 @@ const Appointment = () => {
           <View>
             <View className='text-white text-xs mb-2'>上门方式</View>
             <View className='grid grid-cols-2 gap-4'>
-              <Button
-                className={`method-selector__option bg-gray-900 w-full ${selectedMethod === 'doorbell' ? 'selected' : ''}`}
-                onClick={() => handleMethodSelect('doorbell')}
-              >
-                <View className='method-selector__option-icon'>
-                  <View className='i-carbon-notification' />
-                </View>
-                <View className='method-selector__option-content'>
-                  <View className='method-selector__option-title'>按门铃</View>
-                  <View className='method-selector__option-desc'>到达后按门铃通知您</View>
-                </View>
-              </Button>
-              <Button
-                className={`method-selector__option bg-gray-900 w-full ${selectedMethod === 'silent' ? 'selected' : ''}`}
-                onClick={() => handleMethodSelect('silent')}
-              >
-                <View className='method-selector__option-icon'>
-                  <View className='i-carbon-time' />
-                </View>
-                <View className='method-selector__option-content'>
-                  <View className='method-selector__option-title'>静音模式</View>
-                  <View className='method-selector__option-desc'>到达后直接开始服务</View>
-                </View>
-              </Button>
+              {METHOD_OPTIONS.map(option => (
+                <Button
+                  key={option.value}
+                  className={`method-selector__option bg-gray-900 w-full ${
+                    selectedMethod === option.value ? 'selected' : ''
+                  }`}
+                  onClick={() => handleMethodSelect(option.value)}
+                >
+                  <View className='method-selector__option-icon'>
+                    <View className={option.icon} />
+                  </View>
+                  <View className='method-selector__option-content'>
+                    <View className='method-selector__option-title'>{option.title}</View>
+                    <View className='method-selector__option-desc'>{option.description}</View>
+                  </View>
+                </Button>
+              ))}
             </View>
           </View>
         </View>
