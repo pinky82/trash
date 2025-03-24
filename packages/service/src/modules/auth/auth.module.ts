@@ -8,6 +8,7 @@ import { AuthController } from './auth.controller'
 import { User } from './entities/user.entity'
 import { JwtStrategy } from './strategies/jwt.strategy'
 import { JwtAuthGuard } from './guards/jwt-auth.guard'
+import { WechatService } from './services/wechat.service'
 
 @Module({
   imports: [
@@ -28,8 +29,8 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard'
     }),
     TypeOrmModule.forFeature([User])
   ],
-  providers: [AuthService, JwtStrategy, JwtAuthGuard],
+  providers: [AuthService, JwtStrategy, JwtAuthGuard, WechatService],
   controllers: [AuthController],
-  exports: [AuthService, JwtStrategy, PassportModule, JwtAuthGuard]
+  exports: [AuthService, JwtStrategy, PassportModule, JwtAuthGuard, WechatService]
 })
 export class AuthModule {} 

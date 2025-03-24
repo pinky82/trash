@@ -1,9 +1,12 @@
-import { View, Image, Button, Input } from '@tarojs/components'
-import { useState, useEffect } from 'react'
+import { View, Button, Input } from '@tarojs/components'
+import { useEffect, useCallback } from 'react'
 import Taro from '@tarojs/taro'
 // import '../../styles/iconfont.scss'
 import './index.scss'
 import SafeView from '@/components/SafeView'
+import * as Yup from 'yup'
+import { useFormik } from 'formik'
+import { applicationService } from '@/services'
 
 interface ApplicationForm {
   name: string
@@ -12,12 +15,31 @@ interface ApplicationForm {
   address: string
 }
 
+// 身份证号正则
+const idCardRegex = /^[1-9]\d{5}(18|19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])\d{3}[\dXx]$/
+// 手机号正则
+const phoneRegex = /^1[3-9]\d{9}$/
+
+const validationSchema = Yup.object().shape({
+  name: Yup.string().required('姓名不能为空'),
+  phone: Yup.string().required('手机号不能为空').matches(phoneRegex, '手机号格式不正确'),
+  idCard: Yup.string().required('身份证号不能为空').matches(idCardRegex, '身份证号格式不正确'),
+  address: Yup.string().required('居住地址不能为空'),
+})
+
 const Application = () => {
-  const [form, setForm] = useState<ApplicationForm>({
-    name: '',
-    phone: '',
-    idCard: '',
-    address: '',
+
+  const formik = useFormik<ApplicationForm>({
+    initialValues: {
+      name: '',
+      phone: '',
+      idCard: '',
+      address: '',
+    },
+    validationSchema,
+    onSubmit: (values) => {
+      console.log(values)
+    },
   })
 
   useEffect(() => {
@@ -27,10 +49,23 @@ const Application = () => {
     })
   }, [])
 
-  const handleSubmit = () => {
+  const setFieldValue = useCallback((key: string, value: any) => {
+    formik.setFieldValue(key, value)
+  }, [formik])
+
+  const handleSubmit = useCallback(async() => {
     // TODO: 处理表单提交
-    console.log('Form submitted:', form)
-  }
+    const errors = await formik.validateForm()
+    if (Object.keys(errors).length > 0) {
+      Taro.showToast({
+        title: Object.values(errors)[0] as string,
+        icon: 'none'
+      })
+      return
+    }
+    await applicationService.createApplication(formik.values)
+
+  }, [formik])
 
   return (
     <View className='h-screen bg-black py-4 pt-2 box-border flex flex-col  overflow-y-auto'>
@@ -56,9 +91,9 @@ const Application = () => {
                 type='text'
                 placeholder='请输入真实姓名'
                 className='w-full p-2 text-xs pl-10 rounded-lg bg-gray-900 text-white placeholder-gray-400 box-border'
-                value={form.name}
+                value={formik.values.name}
                 style={{ height: '44px', lineHeight: '44px' }}
-                onInput={e => setForm(prev => ({ ...prev, name: e.detail.value }))}
+                onInput={e => setFieldValue('name', e.detail.value)}
               />
 
               <View className='absolute left-3 top-1/2 text-gray-400 -translate-y-1/2'>
@@ -75,9 +110,9 @@ const Application = () => {
                 type='number'
                 placeholder='请输入手机号'
                 className='w-full p-2 text-xs pl-10 rounded-lg bg-gray-900 text-white placeholder-gray-400 box-border'
-                value={form.phone}
+                value={formik.values.phone}
                 style={{ height: '44px', lineHeight: '44px' }}
-                onInput={e => setForm(prev => ({ ...prev, phone: e.detail.value }))}
+                onInput={e => setFieldValue('phone', e.detail.value)}
               />
               <View className='absolute left-3 top-1/2 text-gray-400 -translate-y-1/2'>
                 <View className='iconfont icon-qudian' />
@@ -93,9 +128,9 @@ const Application = () => {
                 type='idcard'
                 placeholder='请输入身份证号'
                 className='w-full p-2 text-xs pl-10 rounded-lg bg-gray-900 text-white placeholder-gray-400 box-border'
-                value={form.idCard}
+                value={formik.values.idCard}
                 style={{ height: '44px', lineHeight: '44px' }}
-                onInput={e => setForm(prev => ({ ...prev, idCard: e.detail.value }))}
+                onInput={e => setFieldValue('idCard', e.detail.value)}
               />
               <View className='absolute left-3 top-1/2 text-gray-400 -translate-y-1/2'>
                 <View className='iconfont icon-qianyue' />
@@ -112,8 +147,8 @@ const Application = () => {
                 placeholder='请输入详细居住地址'
                 style={{ height: '44px', lineHeight: '44px' }}
                 className='w-full p-2 text-xs pl-10 rounded-lg bg-gray-900 text-white placeholder-gray-400 box-border'
-                value={form.address}
-                onInput={e => setForm(prev => ({ ...prev, address: e.detail.value }))}
+                value={formik.values.address}
+                onInput={e => setFieldValue('address', e.detail.value)}
               />
               <View className='absolute left-3 top-1/2 text-gray-400 -translate-y-1/2'>
                 <View className='iconfont icon-ditubankuai' />

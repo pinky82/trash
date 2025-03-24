@@ -7,64 +7,80 @@ import SafeView from '@/components/SafeView'
 import { communityService } from '@/services/community'
 import {
   AppointmentForm,
-  AppointmentMethod,
   AppointmentTimeSlot,
-  AppointmentFrequency,
   CommunityWithUI,
   AppointmentMethodOption
 } from '@/types/appointment'
-import { OrderFrequency } from '@trash/types'
+import { OrderFrequency, OrderMethod } from '@trash/types'
 import { FrequencyValue } from '@/types/frequency'
 import dayjs from 'dayjs'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
+import Taro from '@tarojs/taro'
+import { orderService } from '@/services'
 
 const TIME_SLOTS: AppointmentTimeSlot[] = [
-  { time: '09:00', isAvailable: true },
-  { time: '10:00', isAvailable: true },
-  { time: '11:00', isAvailable: true },
-  { time: '12:00', isAvailable: true },
-  { time: '13:00', isAvailable: true },
-  { time: '14:00', isAvailable: true },
-  { time: '15:00', isAvailable: true },
-  { time: '16:00', isAvailable: true }
+  { serviceTime: '09:00', isAvailable: true },
+  { serviceTime: '10:00', isAvailable: true },
+  { serviceTime: '11:00', isAvailable: true },
+  { serviceTime: '12:00', isAvailable: true },
+  { serviceTime: '13:00', isAvailable: true },
+  { serviceTime: '14:00', isAvailable: true },
+  { serviceTime: '15:00', isAvailable: true },
+  { serviceTime: '16:00', isAvailable: true }
 ]
 
 const METHOD_OPTIONS: AppointmentMethodOption[] = [
   {
-    value: 'doorbell',
+    value: OrderMethod.DOORBELL,
     title: '按门铃',
     description: '到达后按门铃通知您',
     icon: 'i-carbon-notification'
   },
   {
-    value: 'silent',
+    value: OrderMethod.SILENT,
     title: '静音模式',
     description: '到达后直接开始服务',
     icon: 'i-carbon-time'
   }
 ]
 
+const validationSchema = Yup.object().shape({
+  building: Yup.string().required('请输入楼栋号'),
+  room: Yup.string().required('请输入门牌号'),
+  frequency: Yup.object(),
+  serviceTime: Yup.string().required('请选择上门时间'),
+  method: Yup.string().required('请选择上门方式')
+})
+
 const Appointment = () => {
   const router = useRouter()
   const [showFrequencyPopup, setShowFrequencyPopup] = useState(false)
-  const [selectedTime, setSelectedTime] = useState('')
-  const [selectedMethod, setSelectedMethod] = useState<AppointmentMethod>('doorbell')
-  const [form, setForm] = useState<AppointmentForm>({
-    building: '',
-    room: '',
-    frequency: {
-      specifiedDate: new Date(),
-      cycleDays: '',
-      frequency: OrderFrequency.NO_SERVICE
+
+  const formik = useFormik({
+    initialValues: {
+      building: '',
+      room: '',
+      frequency: {
+        specifiedDate: new Date(),
+        cycleDays: '',
+        frequency: OrderFrequency.NO_SERVICE
+      },
+      serviceTime: '',
+      method: OrderMethod.DOORBELL
     },
-    time: '',
-    method: 'doorbell'
+    validationSchema,
+    onSubmit: (values) => {
+      console.log(values)
+    }
   })
-  
+
   const [communityInfo, setCommunityInfo] = useState<CommunityWithUI | null>(null)
 
   useEffect(() => {
     if (router.params?.id) {
       fetchCommunityDetail(router.params.id)
+      fetchOrders()
     }
   }, [router.params?.id])
 
@@ -73,9 +89,10 @@ const Appointment = () => {
     setShowFrequencyPopup(!showFrequencyPopup)
   }
 
-  const handleFrequencyChange = useCallback((frequency: FrequencyValue) => {
-    setForm(prev => ({ ...prev, frequency }))
-  }, [setForm])
+  const fetchOrders = async () => {
+    const res = await orderService.getOrders()
+    console.log('res', res)
+  }
 
   const frequencyFormatter = (frequency: FrequencyValue) => {
     if (frequency.frequency === OrderFrequency.SPECIFIED_DATE) {
@@ -86,20 +103,23 @@ const Appointment = () => {
     return ''
   }
 
-  const handleTimeSelect = (time: string) => {
-    setSelectedTime(time)
-    setForm(prev => ({ ...prev, time }))
-  }
-
-  const handleMethodSelect = (method: AppointmentMethod) => {
-    setSelectedMethod(method)
-    setForm(prev => ({ ...prev, method }))
-  }
-
-  const handleSubmit = () => {
+  const handleSubmit = useCallback(async () => {
     // TODO: 处理表单提交
-    console.log('Form submitted:', form)
-  }
+    const errors = await formik.validateForm()
+
+    if (Object.keys(errors).length > 0) {
+      Taro.showToast({
+        title: Object.values(errors)[0] as string,
+        icon: 'none'
+      })
+      return
+    }
+    await orderService.createOrder({ communityId: router.params.id, ...formik.values, ...formik.values.frequency })
+    Taro.switchTab({
+      url: '/pages/index/index'
+    })
+
+  }, [formik, router.params.id])
 
   const fetchCommunityDetail = async (id: string) => {
     try {
@@ -112,6 +132,10 @@ const Appointment = () => {
       console.error('获取小区详情错误:', error)
     }
   }
+
+  const setFieldValue = useCallback((key: string, value: any) => {
+    formik.setFieldValue(key, value)
+  }, [formik])
 
   return (
     <View className='h-[100vh] bg-black pb-4 pt-2 box-border flex flex-col overflow-y-auto'>
@@ -147,9 +171,9 @@ const Appointment = () => {
                 placeholder='请输入楼栋号'
                 placeholderClass='text-gray-400'
                 className='w-full p-2 text-xs pl-10 rounded-lg bg-gray-900 text-white placeholder-gray-400 box-border'
-                value={form.building}
+                value={formik.values.building}
                 style={{ height: '44px', lineHeight: '44px' }}
-                onInput={e => setForm(prev => ({ ...prev, building: e.detail.value }))}
+                onInput={e => setFieldValue('building', e.detail.value)}
               />
               <View className='absolute left-3 top-1/2 text-gray-400 -translate-y-1/2'>
                 <View className='iconfont icon-a-01' />
@@ -166,9 +190,9 @@ const Appointment = () => {
                 placeholder='请输入门牌号'
                 placeholderClass='text-gray-400'
                 className='w-full p-2 text-xs pl-10 rounded-lg bg-gray-900 text-white placeholder-gray-400 box-border'
-                value={form.room}
+                value={formik.values.room}
                 style={{ height: '44px', lineHeight: '44px' }}
-                onInput={e => setForm(prev => ({ ...prev, room: e.detail.value }))}
+                onInput={e => setFieldValue('room', e.detail.value)}
               />
               <View className='absolute left-3 top-1/2 text-gray-400 -translate-y-1/2'>
                 <View className='iconfont icon-xinpan' />
@@ -185,7 +209,7 @@ const Appointment = () => {
                 placeholder='请选择上门频率'
                 placeholderClass='text-gray-400'
                 className='w-full p-2 text-xs pl-10 rounded-lg bg-gray-900 text-white placeholder-gray-400 box-border'
-                value={frequencyFormatter(form.frequency)}
+                value={frequencyFormatter(formik.values.frequency)}
                 style={{ height: '44px', lineHeight: '44px' }}
                 disabled
               />
@@ -202,16 +226,15 @@ const Appointment = () => {
             <View className='grid grid-cols-4 gap-2'>
               {TIME_SLOTS.map(slot => (
                 <Button
-                  key={slot.time}
-                  className={`px-4 py-2 rounded-lg text-xs font-medium transition-colors m-0 ${
-                    selectedTime === slot.time
-                      ? 'bg-brand text-white'
-                      : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
-                  }`}
-                  onClick={() => handleTimeSelect(slot.time)}
+                  key={slot.serviceTime}
+                  className={`px-4 py-2 rounded-lg text-xs font-medium transition-colors m-0 ${formik.values.serviceTime === slot.serviceTime
+                    ? 'bg-brand text-white'
+                    : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+                    }`}
+                  onClick={() => formik.setFieldValue('serviceTime', slot.serviceTime)}
                   disabled={!slot.isAvailable}
                 >
-                  {slot.time}
+                  {slot.serviceTime}
                 </Button>
               ))}
             </View>
@@ -224,10 +247,9 @@ const Appointment = () => {
               {METHOD_OPTIONS.map(option => (
                 <Button
                   key={option.value}
-                  className={`method-selector__option bg-gray-900 w-full ${
-                    selectedMethod === option.value ? 'selected' : ''
-                  }`}
-                  onClick={() => handleMethodSelect(option.value)}
+                  className={`method-selector__option bg-gray-900 w-full ${formik.values.method === option.value ? 'selected' : ''
+                    }`}
+                  onClick={() => formik.setFieldValue('method', option.value)}
                 >
                   <View className='method-selector__option-icon'>
                     <View className={option.icon} />
@@ -257,8 +279,8 @@ const Appointment = () => {
         onClick={toggleFrequencyPopup}
       />
       <FrequencySelector
-        value={form.frequency}
-        onChange={handleFrequencyChange}
+        value={formik.values.frequency}
+        onChange={(value) => formik.setFieldValue('frequency', value)}
         onClose={() => setShowFrequencyPopup(false)}
         visible={showFrequencyPopup}
       />

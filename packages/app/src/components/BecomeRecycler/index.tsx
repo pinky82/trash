@@ -1,11 +1,40 @@
 import { View, Text } from '@tarojs/components'
 import './index.scss'
+import { userService } from '@/services'
+import { useState } from 'react'
+import { ApplicationStatus } from '@trash/types'
+import { useDidShow } from '@tarojs/taro'
+
 
 interface BecomeRecyclerProps {
   onApply: () => void
 }
 
 export const BecomeRecycler = ({ onApply }: BecomeRecyclerProps) => {
+
+  const [collectorStatus, setCollectorStatus] = useState(ApplicationStatus.NONE)
+
+  useDidShow(() => {
+    fetchIsCollector()
+  })
+
+  const fetchIsCollector = async () => {
+    const { collectorStatus } = await userService.isCollectorStatus()
+    setCollectorStatus(collectorStatus)
+  }
+
+  const renderButton = () => {
+    if (collectorStatus === ApplicationStatus.NONE || collectorStatus === ApplicationStatus.REJECTED) {
+      return <View className='become-recycler__button' onClick={onApply}>立即申请</View>
+    }
+    if (collectorStatus === ApplicationStatus.PENDING) {
+      return <View className='become-recycler__button'>您已提交申请，请等待审核</View>
+    }
+    if (collectorStatus === ApplicationStatus.APPROVED) {
+      return <View className='become-recycler__button'>前往接单</View>
+    }
+  }
+
   return (
     <View className='become-recycler'>
       <View className='become-recycler__card'>
@@ -30,12 +59,7 @@ export const BecomeRecycler = ({ onApply }: BecomeRecyclerProps) => {
               </View>
             </View>
           </View>
-          <View
-            className='become-recycler__button'
-            onClick={onApply}
-          >
-            立即申请
-          </View>
+          {renderButton()}
         </View>
       </View>
     </View>

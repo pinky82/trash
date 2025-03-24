@@ -32,7 +32,7 @@ class Request {
     };
 
     if (this.token) {
-      headers['Authorization'] = `Bearer ${this.token}`;
+      headers['x-wx-openid'] = this.token;
     }
 
     return headers;

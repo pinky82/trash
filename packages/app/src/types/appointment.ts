@@ -1,3 +1,4 @@
+import { OrderMethod } from '@trash/types'
 import { Community } from '../services/types'
 import { FrequencyValue } from './frequency'
 
@@ -5,14 +6,14 @@ export interface AppointmentForm {
   building: string
   room: string
   frequency: FrequencyValue
-  time: string
-  method: AppointmentMethod
+  serviceTime: string
+  method: OrderMethod
 }
 
 export type AppointmentMethod = 'doorbell' | 'silent'
 
 export interface AppointmentTimeSlot {
-  time: string
+  serviceTime: string
   isAvailable: boolean
 }
 
@@ -27,7 +28,7 @@ export interface CommunityWithUI extends Community {
 }
 
 export interface AppointmentMethodOption {
-  value: AppointmentMethod
+  value: OrderMethod
   title: string
   description: string
   icon: string

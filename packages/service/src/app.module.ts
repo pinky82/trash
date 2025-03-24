@@ -10,6 +10,7 @@ import { CommunityModule } from './modules/community/community.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { OrderModule } from './modules/order/order.module';
+import { ApplicationModule } from './modules/application/application.module';
 
 @Module({
   imports: [
@@ -30,15 +31,16 @@ import { OrderModule } from './modules/order/order.module';
         database: configService.get('DB_DATABASE'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: true,
-        // logging: true,
-        // dropSchema: true,
+        logging: true,
+        dropSchema: true,
       }),
       inject: [ConfigService]
     }),
     AuthModule,
     WechatModule,
     CommunityModule,
-    OrderModule
+    OrderModule,
+    ApplicationModule
   ],
   controllers: [AppController],
   providers: [AppService],

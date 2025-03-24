@@ -4,6 +4,8 @@ import { WechatService } from './wechat.service';
 import { RedisModule } from '../redis/redis.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ApplicationModule } from '../application/application.module';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
@@ -16,6 +18,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       }),
       inject: [ConfigService],
     }),
+    ApplicationModule,
+    AuthModule
   ],
   controllers: [WechatController],
   providers: [WechatService],

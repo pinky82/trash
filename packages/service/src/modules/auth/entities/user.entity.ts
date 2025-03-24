@@ -7,7 +7,7 @@ export class User {
   @ApiProperty({ description: '用户ID' })
   id: number;
 
-  @Column({ length: 20, unique: true, nullable: false })
+  @Column({ length: 20, unique: true, nullable: true })
   @ApiProperty({ description: '手机号' })
   phone: string;
 
@@ -22,10 +22,6 @@ export class User {
   @Column({ length: 255, nullable: true })
   @ApiProperty({ description: '头像URL' })
   avatar: string;
-
-  @Column({ default: false })
-  @ApiProperty({ description: '是否为回收员' })
-  isRecycler: boolean;
 
   @CreateDateColumn()
   @ApiProperty({ description: '创建时间' })

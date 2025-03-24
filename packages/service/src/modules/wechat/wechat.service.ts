@@ -75,4 +75,7 @@ export class WechatService {
       type: 'wechat'
     });
   }
-} 
+  verifyToken(token: string): { openid: string; type: string } {
+    return this.jwtService.verify(token);
+  }
+}

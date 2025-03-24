@@ -1,13 +1,11 @@
-import { View, Image, Button, Text } from '@tarojs/components'
+import { View } from '@tarojs/components'
 import { useState, useEffect, useRef, useMemo } from 'react'
 import { Header } from '../../components/Header'
 import { SearchBar } from '../../components/SearchBar'
 import { CommunityCard } from '../../components/CommunityCard'
 import { BecomeRecycler } from '../../components/BecomeRecycler'
-import { useLoad } from '@tarojs/taro'
 import Taro from '@tarojs/taro'
 import './index.scss'
-import { useSystemInfo } from '@/hooks/useSystemInfo'
 import { communityService } from '../../services/community'
 import { locationUtil } from '../../utils/location'
 import { Community } from '../../services/types'
@@ -20,40 +18,24 @@ export default function Index() {
   const [communities, setCommunities] = useState<CommunityWithUI[]>([])
   const [headerBoundingClientRect, setHeaderBoundingClientRect] = useState<any>(null)
   const headerRef = useRef<any>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const [searchText, setSearchText] = useState('')
-  const [currentLocation, setCurrentLocation] = useState<{ latitude: number; longitude: number } | null>(null)
 
   useEffect(() => {
     fetchCommunities()
   }, [])
 
   const fetchCommunities = async (searchParams?: { name?: string }) => {
-    try {
-      setLoading(true)
-      setError(null)
-      
       // 获取当前位置
       const location = await locationUtil.getCurrentLocation()
-      setCurrentLocation(location)
-      
       // 获取社区列表
       const data = await communityService.getCommunities(location || undefined, searchParams)
-      
       // 合并后端数据和模拟数据
       const mergedData = data.map(item => ({
         ...item,
         image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00' // 模拟数据
       })) as CommunityWithUI[]
-      
       setCommunities(mergedData)
-    } catch (error) {
-      setError('获取社区列表失败，请稍后重试')
-      console.error('获取社区列表错误:', error)
-    } finally {
-      setLoading(false)
-    }
+    
   }
 
   const handleSearch = (value: string) => {

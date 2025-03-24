@@ -1,11 +1,17 @@
-import { Controller, Get, Query, UnauthorizedException } from '@nestjs/common';
+import { Controller, Get, Query, UnauthorizedException, Post, Req, UseGuards } from '@nestjs/common';
 import { WechatService } from './wechat.service';
 import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
+import { WechatAuthGuard } from '../auth/guards/wechat-auth.guard';
+import { ApplicationService } from '../application/application.service';
+import { ApplicationStatus } from '@trash/types';
 
 @ApiTags('wechat')
 @Controller('wechat')
 export class WechatController {
-  constructor(private readonly wechatService: WechatService) {}
+  constructor(
+    private readonly wechatService: WechatService,
+    private readonly applicationService: ApplicationService,
+  ) { }
 
   @Get('login')
   @ApiOperation({ summary: '微信登录' })
@@ -35,5 +41,18 @@ export class WechatController {
     } catch (error) {
       throw new UnauthorizedException('获取用户信息失败');
     }
+  }
+
+  @Get('is-collector-status')
+  @UseGuards(WechatAuthGuard)
+  async isCollectorStatus(@Req() req) {
+    const openid = req.user.openid;
+    const applications = await this.applicationService.findByOpenidAndStatus(
+      openid
+    );
+
+    return {
+      collectorStatus: applications ? applications.status : ApplicationStatus.NONE
+    };
   }
 } 
