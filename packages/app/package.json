@@ -55,8 +55,11 @@
     "@tarojs/shared": "3.6.15",
     "@tarojs/taro": "3.6.15",
     "@trash/types": "workspace:*",
+    "dayjs": "1.11.11",
+    "formik": "^2.4.6",
     "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react-dom": "^18.0.0",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@babel/core": "^7.8.0",

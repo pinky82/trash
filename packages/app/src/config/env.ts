@@ -1,7 +1,7 @@
 // 环境变量配置
 const env = {
   development: {
-    API_URL: 'http://localhost:3000',
+    API_URL: 'http://192.168.3.74:3000',
     APP_TITLE: 'Trash'
   },
   production: {

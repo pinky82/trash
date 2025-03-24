@@ -20,4 +20,6 @@ export interface UserInfo {
   country: string;
   province: string;
   city: string;
-} 
+}
+
+export * from './order'; 

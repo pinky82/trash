@@ -1,123 +1,98 @@
 import { View, Button } from '@tarojs/components'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { OrderFrequency } from '@trash/types'
+import { FrequencyValue } from '../../types/frequency'
+import { Calendar } from '../Calendar'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
+import Taro from '@tarojs/taro'
 import './index.scss'
 
 interface FrequencySelectorProps {
-    value: string
-    onChange: (value: string) => void
+    value: FrequencyValue
+    onChange: (value: FrequencyValue) => void
     onClose: () => void
     visible: boolean
 }
 
+const validationSchema = Yup.object().shape({
+    frequency: Yup.number().required(),
+    cycleDays: Yup.string().when('frequency', ([frequency]: OrderFrequency[]) => {
+        if (frequency === OrderFrequency.REGULAR) {
+            return Yup.string().required('请选择服务日期')
+        }
+        return Yup.string()
+    }),
+    specifiedDate: Yup.date().nullable().when(['frequency'], ([frequency]: OrderFrequency[]) => {
+        if (frequency === OrderFrequency.SPECIFIED_DATE) {
+            return Yup.date().required('请选择服务日期')
+        }
+        return Yup.string()
+    })
+})
+
 export const FrequencySelector = ({ value, onChange, onClose, visible }: FrequencySelectorProps) => {
     const [selectedDays, setSelectedDays] = useState<string[]>([])
-    const [currentDate, setCurrentDate] = useState(new Date())
     const [selectedDate, setSelectedDate] = useState<Date | null>(null)
-    const [currentType, setCurrentType] = useState<'指定服务' | '定期服务' | null>(null)
+    const [currentType, setCurrentType] = useState<OrderFrequency>(value.frequency || OrderFrequency.SPECIFIED_DATE)
 
     const weekDays = ['日', '一', '二', '三', '四', '五', '六']
 
-    const handleFrequencySelect = (frequency: '指定服务' | '定期服务') => {
+    const formik = useFormik({
+        initialValues: {
+            frequency: value.frequency || OrderFrequency.SPECIFIED_DATE,
+            cycleDays: value.cycleDays || '',
+            specifiedDate: value.specifiedDate || null
+        },
+        validationSchema,
+        onSubmit: (values) => {
+            onChange(values)
+            onClose()
+        }
+    })
+
+    useEffect(() => {
+        // 初始化选中状态
+        if (value.cycleDays) {
+            setSelectedDays(value.cycleDays.split('、'))
+        }
+        if (value.specifiedDate) {
+            setSelectedDate(new Date(value.specifiedDate))
+        }
+    }, [value])
+
+    const handleFrequencySelect = (frequency: OrderFrequency) => {
         setCurrentType(frequency)
+        formik.setFieldValue('frequency', frequency)
     }
 
     const handleDaySelect = (day: string) => {
         setSelectedDays(prev => {
-            if (prev.includes(day)) {
-                return prev.filter(d => d !== day)
-            }
-            return [...prev, day]
+            const newDays = prev.includes(day)
+                ? prev.filter(d => d !== day)
+                : [...prev, day]
+            formik.setFieldValue('cycleDays', newDays.sort((a, b) => Number(a) - Number(b)).join('、'))
+            return newDays
         })
     }
 
     const handleDateSelect = (date: Date) => {
         setSelectedDate(date)
+        formik.setFieldValue('specifiedDate', date)
     }
 
-    const handleConfirm = () => {
-        if (currentType === '定期服务' && selectedDays.length > 0) {
-            onChange(`每周${selectedDays.join('、')}`)
-        } else if (currentType === '指定服务' && selectedDate) {
-            const monthNames = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
-            onChange(`${selectedDate.getMonth() + 1}月${selectedDate.getDate()}日`)
+    const handleConfirm = async () => {
+        const errors = await formik.validateForm()
+        if (Object.keys(errors).length > 0) {
+            Taro.showToast({
+                title: Object.values(errors)[0] as string,
+                icon: 'none'
+            })
+            return
         }
+        onChange(formik.values)
         onClose()
-    }
-
-    const previousMonth = () => {
-        setCurrentDate(prev => {
-            const newDate = new Date(prev)
-            newDate.setMonth(prev.getMonth() - 1)
-            return newDate
-        })
-    }
-
-    const nextMonth = () => {
-        setCurrentDate(prev => {
-            const newDate = new Date(prev)
-            newDate.setMonth(prev.getMonth() + 1)
-            return newDate
-        })
-    }
-
-    const renderCalendar = () => {
-        const year = currentDate.getFullYear()
-        const month = currentDate.getMonth()
-        const firstDay = new Date(year, month, 1)
-        const lastDay = new Date(year, month + 1, 0)
-        const daysInMonth = lastDay.getDate()
-        const startingDay = firstDay.getDay()
-
-        const monthNames = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
-
-        return (
-            <View className='frequency-selector__calendar'>
-                <View className='frequency-selector__calendar-header flex items-center justify-between'>
-                    <View className='frequency-selector__regular-title mb-0'>选择日期</View>
-                    <View className='flex items-center'>
-                        <View className='frequency-selector__calendar-nav' onClick={previousMonth}>
-                            <View className='i-carbon-chevron-left'>&lt;</View>
-                        </View>
-                        <View className='frequency-selector__calendar-title'>
-                            {year}年{monthNames[month]}
-                        </View>
-                        <View className='frequency-selector__calendar-nav' onClick={nextMonth}>
-                            <View className='i-carbon-chevron-right'>&gt;</View>
-                        </View>
-                    </View>
-                </View>
-
-                <View className='frequency-selector__calendar-weekdays'>
-                    {weekDays.map(day => (
-                        <View key={day} className='frequency-selector__calendar-weekday'>
-                            {day}
-                        </View>
-                    ))}
-                </View>
-
-                <View className='frequency-selector__calendar-days'>
-                    {Array.from({ length: startingDay }).map((_, index) => (
-                        <View key={`empty-${index}`} className='frequency-selector__calendar-day empty' />
-                    ))}
-                    {Array.from({ length: daysInMonth }).map((_, index) => {
-                        const date = new Date(year, month, index + 1)
-                        const isToday = date.toDateString() === new Date().toDateString()
-                        const isSelected = selectedDate && date.toDateString() === selectedDate.toDateString()
-
-                        return (
-                            <Button
-                                key={index}
-                                className={`frequency-selector__calendar-day bg-gray-900 p-0  mt-2 ${isSelected ? 'selected' : isToday ? 'today' : ''
-                                    }`}
-                                onClick={() => handleDateSelect(date)}
-                            >
-                                {index + 1}
-                            </Button>
-                        )
-                    })}
-                </View>
-            </View>
-        )
+        // formik.handleSubmit()
     }
 
     return (
@@ -129,8 +104,8 @@ export const FrequencySelector = ({ value, onChange, onClose, visible }: Frequen
             <View className='frequency-selector__content'>
                 <View className='frequency-selector__options'>
                     <Button
-                        className={`frequency-selector__option bg-gray-900 w-full ${currentType === '指定服务' ? 'selected' : ''}`}
-                        onClick={() => handleFrequencySelect('指定服务')}
+                        className={`frequency-selector__option bg-gray-900 w-full ${currentType === OrderFrequency.SPECIFIED_DATE ? 'selected' : ''}`}
+                        onClick={() => handleFrequencySelect(OrderFrequency.SPECIFIED_DATE)}
                     >
                         <View className='frequency-selector__option-icon'>
                             <View className='i-carbon-calendar' />
@@ -141,8 +116,8 @@ export const FrequencySelector = ({ value, onChange, onClose, visible }: Frequen
                         </View>
                     </Button>
                     <Button
-                        className={`frequency-selector__option bg-gray-900 w-full ${currentType === '定期服务' ? 'selected' : ''}`}
-                        onClick={() => handleFrequencySelect('定期服务')}
+                        className={`frequency-selector__option bg-gray-900 w-full ${currentType === OrderFrequency.REGULAR ? 'selected' : ''}`}
+                        onClick={() => handleFrequencySelect(OrderFrequency.REGULAR)}
                     >
                         <View className='frequency-selector__option-icon'>
                             <View className='i-carbon-repeat' />
@@ -154,15 +129,14 @@ export const FrequencySelector = ({ value, onChange, onClose, visible }: Frequen
                     </Button>
                 </View>
                 <>
-                    {currentType === '定期服务' && (
+                    {currentType === OrderFrequency.REGULAR && (
                         <View className='frequency-selector__regular'>
                             <View className='frequency-selector__regular-title'>选择日期</View>
                             <View className='frequency-selector__regular-days'>
                                 {weekDays.map(day => (
                                     <Button
                                         key={day}
-                                        className={`frequency-selector__regular-day mt-0 p-0 bg-gray-900 ${selectedDays.includes(day) ? 'selected' : ''
-                                            }`}
+                                        className={`frequency-selector__regular-day mt-0 p-0 bg-gray-900 ${selectedDays.includes(day) ? 'selected' : ''}`}
                                         onClick={() => handleDaySelect(day)}
                                     >
                                         {day}
@@ -172,10 +146,14 @@ export const FrequencySelector = ({ value, onChange, onClose, visible }: Frequen
                         </View>
                     )}
 
-                    {currentType === '指定服务' && <View className='frequency-selector__regular'>
-
-                        {renderCalendar()}
-                    </View>}
+                    {currentType === OrderFrequency.SPECIFIED_DATE && (
+                        <View className='frequency-selector__regular'>
+                            <Calendar
+                                onDateSelect={handleDateSelect}
+                                selectedDate={selectedDate}
+                            />
+                        </View>
+                    )}
 
                     <Button
                         className='frequency-selector__confirm'

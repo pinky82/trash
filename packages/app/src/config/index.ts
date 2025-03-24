@@ -1,1 +1,1 @@
-export const BASE_URL = process.env.TARO_APP_API || 'http://localhost:3000'; 
+export const BASE_URL = process.env.TARO_APP_API || 'http://192.168.3.74:3000'; 

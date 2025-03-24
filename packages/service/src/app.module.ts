@@ -9,6 +9,7 @@ import { WechatModule } from './modules/wechat/wechat.module';
 import { CommunityModule } from './modules/community/community.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { OrderModule } from './modules/order/order.module';
 
 @Module({
   imports: [
@@ -36,7 +37,8 @@ import { AppService } from './app.service';
     }),
     AuthModule,
     WechatModule,
-    CommunityModule
+    CommunityModule,
+    OrderModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,5 +1,5 @@
 import { View, Image, Input, Button } from '@tarojs/components'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from '@tarojs/taro'
 import { FrequencySelector } from '../../components/FrequencySelector'
 import './index.scss'
@@ -13,6 +13,9 @@ import {
   CommunityWithUI,
   AppointmentMethodOption
 } from '@/types/appointment'
+import { OrderFrequency } from '@trash/types'
+import { FrequencyValue } from '@/types/frequency'
+import dayjs from 'dayjs'
 
 const TIME_SLOTS: AppointmentTimeSlot[] = [
   { time: '09:00', isAvailable: true },
@@ -48,15 +51,17 @@ const Appointment = () => {
   const [form, setForm] = useState<AppointmentForm>({
     building: '',
     room: '',
-    frequency: '',
+    frequency: {
+      specifiedDate: new Date(),
+      cycleDays: '',
+      frequency: OrderFrequency.NO_SERVICE
+    },
     time: '',
     method: 'doorbell'
   })
-  const [frequency, setFrequency] = useState('')
-  const [showFrequency, setShowFrequency] = useState(false)
+  
   const [communityInfo, setCommunityInfo] = useState<CommunityWithUI | null>(null)
-  // 获取路由参数
-  console.log(router)
+
   useEffect(() => {
     if (router.params?.id) {
       fetchCommunityDetail(router.params.id)
@@ -68,8 +73,17 @@ const Appointment = () => {
     setShowFrequencyPopup(!showFrequencyPopup)
   }
 
-  const handleFrequencyChange = (frequency: string) => {
+  const handleFrequencyChange = useCallback((frequency: FrequencyValue) => {
     setForm(prev => ({ ...prev, frequency }))
+  }, [setForm])
+
+  const frequencyFormatter = (frequency: FrequencyValue) => {
+    if (frequency.frequency === OrderFrequency.SPECIFIED_DATE) {
+      return `指定日期: ${dayjs(frequency.specifiedDate).format('YYYY-MM-DD')}`
+    } else if (frequency.frequency === OrderFrequency.REGULAR) {
+      return `周期: ${frequency.cycleDays}`
+    }
+    return ''
   }
 
   const handleTimeSelect = (time: string) => {
@@ -171,7 +185,7 @@ const Appointment = () => {
                 placeholder='请选择上门频率'
                 placeholderClass='text-gray-400'
                 className='w-full p-2 text-xs pl-10 rounded-lg bg-gray-900 text-white placeholder-gray-400 box-border'
-                value={form.frequency}
+                value={frequencyFormatter(form.frequency)}
                 style={{ height: '44px', lineHeight: '44px' }}
                 disabled
               />
@@ -243,9 +257,9 @@ const Appointment = () => {
         onClick={toggleFrequencyPopup}
       />
       <FrequencySelector
-        value={frequency}
-        onChange={setFrequency}
-        onClose={() => setShowFrequency(false)}
+        value={form.frequency}
+        onChange={handleFrequencyChange}
+        onClose={() => setShowFrequencyPopup(false)}
         visible={showFrequencyPopup}
       />
     </View>

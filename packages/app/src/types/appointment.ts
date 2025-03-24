@@ -1,9 +1,10 @@
 import { Community } from '../services/types'
+import { FrequencyValue } from './frequency'
 
 export interface AppointmentForm {
   building: string
   room: string
-  frequency: string
+  frequency: FrequencyValue
   time: string
   method: AppointmentMethod
 }
