@@ -73,5 +73,5 @@ coverage
 docker-compose.override.yml
 
 # System Files
-.DS_Store
+# .DS_Store
 Thumbs.db 
