@@ -32,7 +32,7 @@ import { ApplicationModule } from './modules/application/application.module';
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: true,
         logging: true,
-        dropSchema: true,
+        // dropSchema: true,
       }),
       inject: [ConfigService]
     }),
