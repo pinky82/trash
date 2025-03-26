@@ -5,6 +5,13 @@ import { ApplicationEntity } from './entities/application.entity';
 import { CreateApplicationDto } from './dto/create-application.dto';
 import { UpdateApplicationDto } from './dto/update-application.dto';
 import { ApplicationStatus } from '@trash/types';
+
+interface FindAllParams {
+  page?: number;
+  pageSize?: number;
+  status?: ApplicationStatus;
+}
+
 @Injectable()
 export class ApplicationService {
   constructor(
@@ -20,17 +27,35 @@ export class ApplicationService {
     return this.applicationRepository.save(application);
   }
 
-  async findAll() {
-    return this.applicationRepository.find({
-      order: {
-        createdAt: 'DESC',
-      },
-    });
+  async findAll({ page = 1, pageSize = 10, status }: FindAllParams = {}) {
+    const skip = (page - 1) * pageSize;
+
+    const where = status ? { status } : {};
+
+    const [data, total] = await Promise.all([
+      this.applicationRepository.find({
+        where,
+        skip,
+        take: pageSize,
+        order: {
+          createdAt: 'desc',
+        },
+      }),
+      this.applicationRepository.count({ where }),
+    ]);
+
+    return {
+      data,
+      total,
+      page,
+      pageSize,
+    };
   }
 
   async findOne(id: number) {
     const application = await this.applicationRepository.findOne({
       where: { id },
+      relations: ['user'],
     });
     if (!application) {
       throw new NotFoundException(`申请 #${id} 不存在`);

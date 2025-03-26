@@ -1,8 +1,9 @@
-import { Controller, Post, Body, UnauthorizedException } from '@nestjs/common'
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger'
+import { Controller, Post, Body, UnauthorizedException, UseGuards, Get, Req } from '@nestjs/common'
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger'
 import { AuthService } from './auth.service'
 import { LoginDto } from './dto/login.dto'
 import { RegisterDto } from './dto/register.dto'
+import { JwtAuthGuard } from './guards/jwt-auth.guard'
 
 @ApiTags('认证')
 @Controller('auth')
@@ -34,5 +35,14 @@ export class AuthController {
       throw new UnauthorizedException('手机号或密码错误')
     }
     return this.authService.login(user)
+  }
+
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '获取当前用户信息' })
+  async getCurrentUser(@Req() req) {
+    const userId = req.user.id
+    return this.authService.getCurrentUser(userId)
   }
 } 

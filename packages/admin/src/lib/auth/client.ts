@@ -1,5 +1,6 @@
 'use client';
 
+import { userService } from '@/service';
 import type { User } from '@/types/user';
 
 function generateToken(): string {
@@ -77,9 +78,12 @@ class AuthClient {
 
   async getUser(): Promise<{ data?: User | null; error?: string }> {
     // Make API request
-
+    const token = localStorage.getItem('token');
+    if(token) {
+      const res = await userService.getCurrentUser();
+      return { data: Object.assign(user, {firstName: res.name,LastName: res.name}) };
     // We do not handle the API, so just check if we have a token in localStorage.
-    const token = localStorage.getItem('custom-auth-token');
+    }
 
     if (!token) {
       return { data: null };
@@ -89,7 +93,7 @@ class AuthClient {
   }
 
   async signOut(): Promise<{ error?: string }> {
-    localStorage.removeItem('custom-auth-token');
+    localStorage.removeItem('token');
 
     return {};
   }

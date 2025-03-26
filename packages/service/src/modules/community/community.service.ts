@@ -30,8 +30,6 @@ export class CommunityService {
       });
     }
 
-    console.log(location)
-
     // 如果有位置信息，计算距离并排序
     if (location) {
       // 使用 Haversine 公式计算距离（单位：公里）
@@ -58,7 +56,7 @@ export class CommunityService {
       const raw = communities.raw[index];
       return {
         ...community,
-        distance: location ? Number(raw.distance.toFixed(2)) : undefined
+        distance: location ? Number(raw.distance?.toFixed(2)) : undefined
       };
     });
   }
@@ -96,26 +94,26 @@ export class CommunityService {
   }
 
   // 使用 Haversine 公式计算两点之间的距离（单位：公里）
-  private calculateDistance(
-    lat1: number,
-    lon1: number,
-    lat2: number,
-    lon2: number
-  ): number {
-    const R = 6371; // 地球半径（公里）
-    const dLat = this.toRad(lat2 - lat1);
-    const dLon = this.toRad(lon2 - lon1);
-    const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(this.toRad(lat1)) *
-        Math.cos(this.toRad(lat2)) *
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c;
-  }
+  // private calculateDistance(
+  //   lat1: number,
+  //   lon1: number,
+  //   lat2: number,
+  //   lon2: number
+  // ): number {
+  //   const R = 6371; // 地球半径（公里）
+  //   const dLat = this.toRad(lat2 - lat1);
+  //   const dLon = this.toRad(lon2 - lon1);
+  //   const a =
+  //     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+  //     Math.cos(this.toRad(lat1)) *
+  //       Math.cos(this.toRad(lat2)) *
+  //       Math.sin(dLon / 2) *
+  //       Math.sin(dLon / 2);
+  //   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  //   return R * c;
+  // }
 
-  private toRad(degrees: number): number {
-    return (degrees * Math.PI) / 180;
-  }
+  // private toRad(degrees: number): number {
+  //   return (degrees * Math.PI) / 180;
+  // }
 } 

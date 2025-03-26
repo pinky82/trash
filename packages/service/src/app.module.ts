@@ -31,7 +31,7 @@ import { ApplicationModule } from './modules/application/application.module';
         database: configService.get('DB_DATABASE'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: true,
-        logging: true,
+        // logging: true,
         // dropSchema: true,
       }),
       inject: [ConfigService]

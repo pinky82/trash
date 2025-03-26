@@ -1,3 +1,5 @@
+'use client';
+
 import axios, { 
   AxiosInstance, 
   AxiosRequestConfig, 
@@ -8,7 +10,7 @@ import axios, {
 
 class Request {
   private instance: AxiosInstance;
-  private token: string | null = null;
+  private token: string | null = null
 
   constructor() {
     this.instance = axios.create({
@@ -19,8 +21,8 @@ class Request {
     // 请求拦截器
     this.instance.interceptors.request.use(
       (config: InternalAxiosRequestConfig) => {
-        if (this.token) {
-          config.headers.Authorization = `Bearer ${this.token}`;
+        if (this.token || localStorage.getItem('token')) {
+          config.headers.Authorization = `Bearer ${this.token || localStorage.getItem('token')}`;
         }
         return config;
       },

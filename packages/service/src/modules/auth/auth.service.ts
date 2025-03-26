@@ -22,6 +22,11 @@ export class AuthService {
     return null
   }
 
+  async getCurrentUser(userId: number) {
+    const user = await this.userRepository.findOne({ where: { id: userId } })
+    return user
+  }
+
   async login(user: any) {
     const payload = { phone: user.phone, sub: user.id }
     return {

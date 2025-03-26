@@ -35,7 +35,7 @@ const defaultValues = { phone: '', password: '' } satisfies Values;
 
 export function SignInForm(): React.JSX.Element {
   const router = useRouter();
-  // const user = useUser();
+  const { checkSession } = useUser();
   const [showPassword, setShowPassword] = React.useState<boolean>(false);
   const [isPending, setIsPending] = React.useState<boolean>(false);
 
@@ -49,13 +49,15 @@ export function SignInForm(): React.JSX.Element {
   const onSubmit = React.useCallback(
     async (values: Values): Promise<void> => {
       setIsPending(true);
-      const response = await userService.login(values.phone, values.password);
+      const response = await userService.login(values.phone, values.password).finally(() => {
+        setIsPending(false);
+      });
       if (response.access_token) {
         request.setToken(response.access_token);
-        // await user!.checkSession(response.user);
-        router.push('/');
+        const res = await userService.getCurrentUser();
+        await checkSession?.();
+        router.refresh();
       }
-      setIsPending(false);
     },
     [router, setError]
   );
@@ -118,11 +120,6 @@ export function SignInForm(): React.JSX.Element {
               </FormControl>
             )}
           />
-          <div>
-            <Link component={RouterLink} href={paths.auth.resetPassword} variant="subtitle2">
-              忘记密码？
-            </Link>
-          </div>
           {errors.root ? <Alert color="error">{errors.root.message}</Alert> : null}
           <Button disabled={isPending} type="submit" variant="contained">
             登录
